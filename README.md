@@ -2,7 +2,7 @@
 
 A 15-second, 1080p60 motion graphics showreel with a synced soundtrack. It's built entirely in code: no After Effects, no keyframes, no stock assets.
 
-**▶ [`showreel.mp4`](showreel.mp4)**  ·  Also in this repo, built on the same engine: the [Seventh Seal brand reel](seventhseal/) the [«Adminpanelet» announcement](adminpanel/), and a [live hero](sitehero/) for seventhseal.no.
+**▶ [`showreel.mp4`](showreel.mp4)**  ·  Also in this repo, built on the same engine: the [Seventh Seal brand reel](seventhseal/), the [«Adminpanelet» announcement](adminpanel/), and a [live hero](sitehero/) for seventhseal.no.
 
 ![contact sheet](media/contact-sheet.jpg)
 
