@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Claude — Motion Reel ’26</title>
+    <style>
+      @font-face { font-family: 'Inter Tight'; font-weight: 900; src: url(fonts/inter-tight-latin-900-normal.woff2) format('woff2'); }
+      @font-face { font-family: 'Inter Tight'; font-weight: 900; font-style: italic; src: url(fonts/inter-tight-latin-900-italic.woff2) format('woff2'); }
+      @font-face { font-family: 'Inter Tight'; font-weight: 800; src: url(fonts/inter-tight-latin-800-normal.woff2) format('woff2'); }
+      @font-face { font-family: 'Inter Tight'; font-weight: 500; src: url(fonts/inter-tight-latin-500-normal.woff2) format('woff2'); }
+      @font-face { font-family: 'JetBrains Mono'; font-weight: 500; src: url(fonts/jetbrains-mono-latin-500-normal.woff2) format('woff2'); }
+      @font-face { font-family: 'JetBrains Mono'; font-weight: 700; src: url(fonts/jetbrains-mono-latin-700-normal.woff2) format('woff2'); }
+      @font-face { font-family: 'Instrument Serif'; font-weight: 400; src: url(fonts/instrument-serif-latin-400-normal.woff2) format('woff2'); }
+      @font-face { font-family: 'Instrument Serif'; font-weight: 400; font-style: italic; src: url(fonts/instrument-serif-latin-400-italic.woff2) format('woff2'); }
+      html, body { margin: 0; height: 100%; background: #000; color: #f2ede4; font-family: 'JetBrains Mono', monospace; }
+      body { display: grid; place-items: center; }
+      canvas { width: min(100vw, 177.78vh); height: auto; display: block; }
+      #play { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(0,0,0,.6); border: 0; color: inherit; font: 700 20px 'JetBrains Mono', monospace; letter-spacing: .2em; cursor: pointer; }
+      body.render #play { display: none; }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <button id="play" hidden>▶ PLAY REEL</button>
+    <script type="module">
+      import { init, renderFrame, totalFrames, FPS, DURATION } from './reel.js';
+      import { renderSoundtrack } from './audio.js';
+
+      const canvas = document.getElementById('c');
+      const renderMode = new URLSearchParams(location.search).has('render');
+      if (renderMode) document.body.classList.add('render');
+
+      await init(canvas);
+      window.__reel = { renderFrame, totalFrames, FPS, ready: true };
+      if (renderMode) renderFrame(0, { subsamples: 1 });
+
+      if (!renderMode) {
+        // Live preview: realtime playback with the synthesized soundtrack.
+        renderFrame(Math.round(13.9 * FPS), { subsamples: 1 });
+        const btn = document.getElementById('play');
+        btn.hidden = false;
+        btn.onclick = async () => {
+          btn.hidden = true;
+          const ac = new AudioContext();
+          const { left, right, sampleRate } = renderSoundtrack(ac.sampleRate);
+          const buf = ac.createBuffer(2, left.length, sampleRate);
+          buf.copyToChannel(left, 0);
+          buf.copyToChannel(right, 1);
+          const src = ac.createBufferSource();
+          src.buffer = buf;
+          src.connect(ac.destination);
+          const start = ac.currentTime + 0.1;
+          src.start(start);
+          const tick = () => {
+            const t = ac.currentTime - start;
+            if (t >= DURATION) {
+              btn.textContent = '↻ PLAY AGAIN';
+              btn.hidden = false;
+              return;
+            }
+            renderFrame(Math.max(0, Math.min(totalFrames - 1, Math.floor(t * FPS))), { subsamples: 1 });
+            requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        };
+      }
+    </script>
+  </body>
+</html>
