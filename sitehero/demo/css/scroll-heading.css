@@ -1,0 +1,35 @@
+/* Scroll-progress section heading reveal (index + services) */
+.ss-scroll-heading__line {
+  display: block;
+}
+
+html.js-scroll-heading [data-scroll-heading].ss-scroll-heading--ready .ss-scroll-heading__word {
+  display: inline-block;
+  vertical-align: baseline;
+  opacity: calc(0.22 + var(--word-progress, 0) * 0.78);
+  transform: translate3d(0, calc((1 - var(--word-progress, 0)) * 0.35em), 0);
+  color: rgba(10, 10, 10, calc(0.28 + var(--word-progress, 0) * 0.72));
+  will-change: opacity, transform;
+}
+
+html.js-scroll-heading [data-scroll-heading].text-paper.ss-scroll-heading--ready .ss-scroll-heading__word {
+  color: rgba(255, 255, 255, calc(0.28 + var(--word-progress, 0) * 0.72));
+}
+
+.ss-heading-script {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-style: italic;
+  font-size: 1.1em;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  text-transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js-scroll-heading .ss-scroll-heading__word {
+    opacity: 1 !important;
+    transform: none !important;
+    color: inherit !important;
+    will-change: auto !important;
+  }
+}

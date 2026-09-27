@@ -1,0 +1,105 @@
+/* Seventh Seal — roed tekst som holder kontrastkravet
+   ====================================================
+   MAA LASTES SIST av stilarkene. Reglene under overstyrer Tailwinds
+   .text-accent og fotlenkene i css/footer.css, og de har samme
+   spesifisitet (0,1,0) - da avgjoer rekkefoelgen.
+
+   HVORFOR. #ff1e3c maaler 3,82:1 mot hvitt, 3,53:1 mot soeylebaandet,
+   3,41:1 mot bg-mist og 3,35:1 mot betongen i seksjon 02. WCAG krever
+   4,5:1 for tekst under 18,66 px fet. Stikktitlene er 12 px og
+   soeylenumrene 11 px, saa 43 tekstelementer paa 24 sider laa under
+   kravet - hele nettstedet, ikke bare soeylene.
+
+   EN ENKELT TONE KAN IKKE LOESE DET. Mot en lys flate maa relativ
+   luminans vaere <= 0,1547; mot sort maa den vaere >= 0,1750.
+   Vinduene overlapper ikke. Soekt gjennom hele RGB-rommet: null treff
+   som klarerer baade #f0f0f0 og #000000 paa 4,5:1.
+
+   DELELINJA ER TEKST MOT FLATE:
+     --accent-text  #d70022   all roed TEKST paa lys grunn
+     #ff1e3c        uendret   roed tekst paa MOERK grunn, og alle roede
+                              FLATER: knappefyll, kantlinjer, streker,
+                              fokusringer, SVG-stroke
+
+   Ogsaa de store tallene (72 px) bytter, selv om de klarerte gulvet
+   paa 3,0:1 fra foer. Stikktittelen staar rett over dem i samme
+   aksentrolle; to roedtoner 24 px fra hverandre ville lest som en
+   glipp, ikke som et system.
+
+   #d70022 er den naermeste tonen i RGB-rommet som klarerer 4,5:1 mot
+   rgb(235) - ett hakk moerkere enn den moerkeste flaten som er maalt,
+   saa teksturen i seksjon 02 har margin. dE76 fra #ff1e3c er 12,2.
+
+   Vil du ha en annen tone, staar den ETT sted: --accent-text. Kravet
+   den maa holde er 4,5:1 mot rgb(240,240,240). */
+:root {
+  --accent-text: #d70022;
+  /* LYSERE GRUNN ENN 235 KREVER EN MOERKERE TONE. Arbeid-heroen er
+     rgb(214) - midt mellom bg-mist (242) og rgb(185), snittet av
+     soeyletuppene i referansen. Der maaler --accent-text 3,69:1 og
+     faller. #bb0022 er den naermeste tonen til --accent-text som
+     klarerer 4,5:1 mot rgb(214): 4,61:1 der, 5,98:1 mot 242 og 6,43:1
+     mot hvitt. Samme tone for stor og liten tekst, av samme grunn som
+     for --accent-text: to roedtoner i samme aksentrolle leser som en
+     glipp, ikke som et system. */
+  --accent-text-moerk: #bb0022;
+}
+
+.text-accent {
+  color: var(--accent-text);
+}
+
+/* Fotlenkene: gjeldende side og hover staar roede paa bg-mist (242). */
+.ss-footer__link--current,
+.ss-footer__link:hover {
+  color: var(--accent-text);
+}
+
+/* ARBEID-HEROENS GRAA (rgb 214): eyebrowen, det roede ordet i H1 og
+   det aktive navpunktet i den graa headeren. Navpunktet faar tonen
+   gjennom data-header-aktiv paa seksjonen, som peker hit - verdien
+   staar bare her. */
+.ss-hero-has-scene--arbeid .text-accent {
+  color: var(--accent-text-moerk);
+}
+
+/* MOERK GRUNN: merkevarefargen staar. #ff1e3c gir 5,50:1 mot sort og
+   5,19:1 mot #0a0a0a. Den moerkere tonen ville falt til 3,91:1 og
+   blitt et NYTT brudd. */
+.bg-ink .text-accent,
+.hero .text-accent,
+.ss-principles--dark .text-accent {
+  color: #ff1e3c;
+}
+
+/* MEN soeylenumrene staar paa det LYSE baandet inne i den moerke
+   seksjonen, saa de skal ha den moerke tonen likevel. Samme
+   spesifisitet som regelen over (0,2,0) - rekkefoelgen avgjoer, og
+   denne staar sist med vilje. */
+.ss-principles--dark .ss-principle-row__num {
+  color: var(--accent-text);
+}
+
+/* ── Inline-lenke i broedtekst ───────────────────────────────────────
+   Laa tidligere inline i index.html og services.html, som to like
+   kopier, mens about, gratis-nettsidesjekk, guider,
+   hva-koster-en-nettside, lage-nettside-for-bedrift og
+   nettsider-for-bedrifter brukte Tailwind-klassene underline,
+   decoration-ink/25 og hover:decoration-accent - som ikke finnes i den
+   kompilerte css/styles.css. De 19 lenkene rendret derfor som
+   broedtekst.
+
+   Regelen bor her fordi accent.css er det eneste stilarket alle 24
+   sidene laster, og fordi hover-tilstanden allerede er --accent-text,
+   som denne fila eier. index.html beholder sine egne overstyringer for
+   .ss-om, som har hoyere spesifisitet og fortsatt vinner. */
+.ss-inline-link {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-color: rgba(0, 0, 0, 0.35);
+  transition: color 0.15s, text-decoration-color 0.15s;
+}
+.ss-inline-link:hover {
+  color: var(--accent-text, #d70022);
+  text-decoration-color: var(--accent-text, #d70022);
+}

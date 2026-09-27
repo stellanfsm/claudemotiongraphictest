@@ -1,0 +1,2545 @@
+﻿<!DOCTYPE html>
+<html lang="nb-NO" data-page="index" data-header-flip="hero">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Maa staa foer stilarket: markerer at JS er tilgjengelig, saa den
+       transparente headeren over heroen kan males fra foerste frame i
+       stedet for aa blinke hvitt. Samme moenster som contact.html. -->
+  <script>document.documentElement.classList.add("js");</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Nettsider for bedrifter | Webdesign i Norge – Seventh Seal</title>
+  <meta name="description" content="Seventh Seal bygger moderne nettsider for små og mellomstore bedrifter. Priser fra 7 500 kr + 500 kr/mnd — med adminpanel, hosting og gratis førsteutkast." />
+  <meta name="author" content="Seventh Seal" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <link rel="canonical" href="https://seventhseal.no/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Seventh Seal" />
+  <meta property="og:locale" content="nb_NO" />
+  <meta property="og:title" content="Nettsider for bedrifter | Webdesign i Norge – Seventh Seal" />
+  <meta property="og:description" content="Seventh Seal bygger moderne nettsider for små og mellomstore bedrifter. Priser fra 7 500 kr + 500 kr/mnd — med adminpanel, hosting og gratis førsteutkast." />
+  <meta property="og:url" content="https://seventhseal.no/" />
+  <meta property="og:image" content="https://seventhseal.no/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Seventh Seal — webdesign og nettsideutvikling i Norge" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Nettsider for bedrifter | Webdesign i Norge – Seventh Seal" />
+  <meta name="twitter:description" content="Seventh Seal bygger moderne nettsider for små og mellomstore bedrifter. Priser fra 7 500 kr + 500 kr/mnd — med adminpanel, hosting og gratis førsteutkast." />
+  <meta name="twitter:image" content="https://seventhseal.no/assets/og-image.png" />
+  <meta name="twitter:image:alt" content="Seventh Seal — webdesign og nettsideutvikling i Norge" />
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <!-- Posteren er LCP-elementet, ikke videoen: <video> staar paa
+       preload="metadata", saa selve klippet hentes ikke foer avspilling.
+       Ett preload erstatter de tre betongutsnittene. -->
+  <link rel="preload" href="assets/hero-7s-poster.webp" as="image" type="image/webp" fetchpriority="high">
+  <link rel="preload" href="assets/fonts/ibm-plex-sans/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/ibm-plex-sans/ibm-plex-sans-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/styles.css?v=deploy-20260923-2" />
+  <link rel="stylesheet" href="css/footer.css?v=deploy-20260923-2" />
+  <link rel="stylesheet" href="css/header.css?v=deploy-20260923-2" />
+  <link rel="stylesheet" href="css/scroll-heading.css?v=deploy-20260923-2" />
+  <link rel="stylesheet" href="css/nettsidesjekk-cta.css?v=deploy-20260923-2" />
+  <link rel="stylesheet" href="css/accent.css?v=deploy-20260923-2" />
+  <link rel="stylesheet" href="css/hero-live.css" />
+  <style>
+
+    /* == Om Seventh Seal: hvit betong ==================================
+       Vanlig block-seksjon som .ss-cta-band, ikke 100vw-breakouten fra
+       nettsidesjekk-baandet. <main> har ingen max-width, saa bakgrunnen
+       naar viewportkanten av seg selv - uten aa skape overflowen som
+       100vw ellers krever et overflow-x: clip for aa klippe bort.
+
+       BETONGEN ER FRYST. Den ble malt av .ss-paint__fill::before, som
+       skalerte inn fra venstre naar seksjonen kom i syne. Flaten skal
+       staa fast, saa seksjonen er tatt ut av .ss-paint__fill og maler
+       igjen sin egen bakgrunn - samme vei som uten JS alltid har gaatt.
+
+       Animasjonen er FJERNET, ikke satt til null varighet: uten klassen
+       finnes ::before-laget ikke lenger, og det ligger ingen sovende
+       transition igjen som kan vaakne av en senere endring.
+
+       Seksjonen er fortsatt .ss-paint, saa de roede linjene og innholdet
+       toner inn som foer. Skal de ogsaa fryses, er det .ss-paint__line
+       og .ss-paint__content som maa av - det er ikke gjort her.
+
+       background-color er betongens egen median (240): laster ikke
+       bildet, staar en lys flate framfor den svarte standarden.
+
+       --paint-fill blir staaende selv om den ikke virker naa. Den leses
+       av animations.js, og .ss-om var det eneste stedet paa hele
+       nettstedet som satte den - fjernes den, henger hooken igjen uten
+       avsender, og tools/check-assets.py stopper commiten paa regel E.
+       Alternativet var aa rive var()-en ut av den delte JS-en, altsaa
+       roere alle sidene for en frossen seksjon. Den staar ogsaa klar
+       hvis fyllet skal paa igjen: da er det bare klassen som mangler. */
+    .ss-om {
+      --paint-fill: #f0f0f0;
+      background-color: #f0f0f0;
+      background-image: url("assets/hvit-betong.webp");
+      /* Sprekk-kontinuitet mot heroen. Heroen er hoydestyrt cover med
+         object-position: right, saa skalaen er boxH/866 og bildets
+         hoyrekant ligger paa viewportens. Sprekken staar 1389px fra
+         hoyrekanten i hero-utsnittet og 1295px i dette, altsaa er dette
+         bildet 1389/1295 = 1,0726 for smalt i forhold til sprekken.
+
+         Skaleres det 1,0726 ganger heroens skala og hoyrejusteres,
+         lander begge sprekkene paa samme x - uten en eneste hardkodet
+         px-verdi, og dermed uten den feilklassen knappekonstanten hadde.
+
+         Malt avvik paa 1280, 1440, 1920 og 2560, med slank og bred
+         chrome: 0,00 px paa alle atte. Bildet dekker viewportbredden
+         overalt (1416-2931px mot 1280-2560).
+
+         auto for bredden, ikke cover: cover ville skalert mot bredden
+         her, siden seksjonen er mye lavere enn bildet er hoyt, og da
+         foelger den en helt annen regel enn heroen. */
+      background-size: auto calc(1.0726 * max(100vh, 560px));
+      background-position: right top;
+      background-repeat: no-repeat;
+    }
+    /* == Roede linjer over og under ===================================
+       Absolutt posisjonert framfor i flyten, saa de ikke legger 2px til
+       seksjonshoyden. Den andre grunnen var .ss-paint__fill::before, som
+       et statisk element i flyten ville blitt malt under - samme felle
+       som knappene gikk i under 1024. Den er historisk naa som betongen
+       er fryst og males som seksjonens egen bakgrunn, men
+       posisjoneringen beholdes for hoydens skyld.
+
+       z-index 1 legger dem over bakgrunnen og under innholdet (z-10).
+
+       INGEN SVART HAARSTREK PAA LINJENE. Nettsidesjekk-baandet legger
+       1px #0a0a0a paa topplinja og tar bunnens svarte fra panelets
+       border-bottom - men det baandet ligger mellom to lyse flater.
+       Her:
+         OVERKANT moter heroens svarte betong. En svart haarstrek der er
+         usynlig, saa den er utelatt.
+         UNDERKANT moter bg-mist (242). Der TRENGS den svarte, og den
+         ligger allerede som border-b border-ink paa seksjonen. Den
+         beholdes: statisk svart under animert roedt, altsaa samme
+         arbeidsdeling som nettsidesjekk-baandet, uten dobbel strek.
+       bottom: 0 maaler til padding-kanten, saa den roede linja lander
+       rett OVER borderen, ikke oppaa den. */
+    .ss-om__line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      height: 2px;
+      background-color: #ff1e3c;
+      pointer-events: none;
+    }
+    .ss-om__line--top {
+      top: 0;
+    }
+    .ss-om__line--bottom {
+      bottom: 0;
+    }
+
+    /* == SEKSJON 02 MOERKNER FOER SOEYLENE ===========================
+       Headeren blir sort naar toppen av denne seksjonen naar
+       headerens underkant, og seksjonen foelger etter. To slag, ikke
+       ett: headeren momentant, seksjonen 90 ms senere over 200 ms.
+       Terskelen ligger 468-737 px foer soeyleseksjonen naar headeren,
+       avhengig av bredde.
+
+       TEKSTUREN MOERKNER, DEN BYTTES IKKE. ::after er et sort lag over
+       den frosne betongflaten, som gaar fra gjennomsiktig til dekkende.
+       Ved opasitet 1 er teksturen usynlig, saa resultatet er samme
+       flate sort som soeylene - og betongen under er urort.
+
+       TEKSTEN SNUR BINAERT, IKKE I TAKT MED FLATEN. Toner man begge
+       lineaert, moetes de paa midten og kontrasten bunner ut paa
+       1,03:1. Samme klasse som INK_FLIP 0,4684 i hero-header.js.
+
+       KRYSSPUNKTET er maalt: flaten passerer rgb(120) = #787878, der
+       moerk og hvit tekst begge gir 4,48:1. Det er 0,4686 av 255 -
+       samme konstant som headeren bruker. Med lineaer opasitet naas
+       det midt i toningen, altsaa 90 + 100 = 190 ms.
+
+       DERFOR steps(1, end) med 100 ms varighet og 90 ms forsinkelse:
+       fargen staar stille og hopper ved 190 ms. Vinduet der flaten er
+       under 4,5:1 er 2,0 av 240 kanaltrinn = 0,83 % av toningen, saa
+       hoyst ETT malt bilde lander i det, paa 4,48:1 i 16,7 ms. Det er
+       0,4 % under kravet, og godtatt - samme avvik som headeren
+       allerede har paa 4,45:1 ved sin egen terskel.
+
+       .ss-inline-link mister sin 150 ms hover-fade paa fargen inne i
+       denne seksjonen. Med den paa ville lenka kryssfadet gjennom
+       graatoner mens flaten fortsatt moerknet, og der maalte jeg
+       2,88:1. Understrekingen fader fortsatt. */
+    .ss-om::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-color: #000000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms linear 90ms;
+    }
+    html.om-moerk .ss-om::after {
+      opacity: 1;
+    }
+    .ss-om,
+    .ss-om .text-ink,
+    .ss-om .text-accent,
+    .ss-om .border-ink {
+      transition:
+        color 100ms steps(1, end) 90ms,
+        border-color 100ms steps(1, end) 90ms;
+    }
+    /* Uten dette ville lenkas egen transition: color .15s animert den
+       arvede fargen gjennom graatoner. */
+    .ss-om .ss-inline-link {
+      transition: text-decoration-color 0.15s;
+    }
+    /* Avsnittene baerer text-ink/85, som IKKE finnes i den kompilerte
+       Tailwind-CSS-en - de arver fra seksjonen. Derfor foerste
+       selektor: den flipper arven, og h2-en tas av den andre. */
+    html.om-moerk .ss-om,
+    html.om-moerk .ss-om .text-ink {
+      color: #ffffff;
+    }
+    /* Merkevarefargen, ikke --accent-text: 5,50:1 mot sort. */
+    html.om-moerk .ss-om .text-accent {
+      color: #ff1e3c;
+    }
+    html.om-moerk .ss-om .border-ink {
+      border-color: #ffffff;
+    }
+    html.om-moerk .ss-om .ss-inline-link {
+      text-decoration-color: rgba(255, 255, 255, 0.35);
+    }
+    /* Seksjonens egen border-b beholdes sort: den moeter soeylenes
+       sorte flate, og en hvit haarstrek der ville vaert en ny strek
+       ingen har bedt om. Den roede linja over og under staar - 5,50:1
+       mot sort, og naar begge sider er sorte er den det eneste som
+       markerer grensen. */
+
+    /* RASK RULLING. Toningen tar 290 ms, og banen fra terskelen til
+       seksjonens underkant er bare 156 px paa 1440 og 1024. Maalt:
+       toningen rekker aa bli ferdig opp til rundt 540 px/s der, og
+       900 px/s paa 390. Over det ville seksjonen staatt halvmoerk idet
+       den roede streken og soeylene naar headeren.
+
+       Da hopper den til maalet i stedet: skriptet setter om-straks naar
+       underkanten naar headerens underkant, og her nulles overgangen.
+       Paa det tidspunktet ligger hele seksjonen bak headeren, saa
+       hoppet er ikke synlig - det som er synlig er at man aldri moeter
+       en halvmoerk flate ved siden av de sorte soeylene. Ved vanlig
+       rullefart naas dette punktet lenge etter at toningen er ferdig,
+       og klassen gjoer ingenting. */
+    html.om-straks .ss-om::after,
+    html.om-straks .ss-om,
+    html.om-straks .ss-om .text-ink,
+    html.om-straks .ss-om .text-accent,
+    html.om-straks .ss-om .border-ink {
+      transition: none;
+    }
+
+    /* Reduced-motion: momentant skifte ved terskelen. Designbeslutningen
+       beholdes, bare bevegelsen forsvinner. Loest i CSS framfor i JS,
+       saa det virker ogsaa naar brukeren endrer innstillingen etter at
+       sida er lastet. */
+    @media (prefers-reduced-motion: reduce) {
+      .ss-om::after,
+      .ss-om,
+      .ss-om .text-ink,
+      .ss-om .text-accent,
+      .ss-om .border-ink {
+        transition: none;
+      }
+    }
+
+
+    /* == NETTSIDESJEKK-BAANDET, forsidens variant ====================
+       Baandet ligger i css/nettsidesjekk-cta.css og deles av seks
+       sider. Begge reglene her gjelder BARE forsiden, og staar derfor
+       inline framfor i den delte fila - de fem andre sidene skal ikke
+       roeres, og fila slipper en buster-bump.
+
+       DEN HVITE STRIPA. Baandet har margin-top: clamp(1.25rem, 3.5vw,
+       2rem) - "luft over kortet". Maalt som piksler: 32 px hvitt paa
+       1440 og 1024, 20 px paa 390, mellom soeyleseksjonens sorte flate
+       og den roede streken. Marginen ligger UTENFOR seksjonen, saa det
+       er body som lyser gjennom.
+
+       Paa de fem andre sidene ligger det en lys flate over baandet
+       (242, 255 eller gjennomsiktig), og da er lufta usynlig. Det er
+       bare her, under den sorte soeyleseksjonen, at den blir en stripe.
+       Derfor soeskenselektoren: ingen luft naar noe moerkt ligger over.
+       De tre andre roede strekene paa sida er maalt og har ingen
+       stripe - streken ligger rett paa flaten sin. */
+    .ss-principles--dark + .ss-nettsidesjekk-band {
+      margin-top: 0;
+    }
+
+    /* BETONGTEKSTUREN. Samme bilde og samme skala som seksjon 02, saa
+       materialet leser likt. Den males som panelets egen bakgrunn -
+       ikke av et lag som animeres - noeyaktig som da flaten i .ss-om
+       ble fryst. Baandet har ingen .ss-paint__fill og ingen
+       .ss-paint__content, bare to .ss-paint__line, saa det er kun de
+       roede strekene som glir inn. Teksturen kan ikke bevege seg.
+
+       Den ligger paa __panel og ikke paa seksjonen: panelet er
+       bg-paper og dekker hele flaten, saa en bakgrunn paa seksjonen
+       ville ligget skjult bak den.
+
+       background-position: center, ikke right top som i .ss-om. Samme
+       skala gir samme korn; et annet utsnitt gjoer at det leser som
+       samme stein, ikke som samme flekk om igjen. */
+    html[data-page="index"] .ss-nettsidesjekk-band__panel {
+      background-image: url("assets/hvit-betong.webp");
+      background-size: auto calc(1.0726 * max(100vh, 560px));
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    /* == NETTSIDESJEKK-BAANDET SOM SKRAA FLATE, fra 768 og opp ========
+       Seksjonen skal lese som en soeyle. Den gaar i FULL BREDDE, og
+       derfor har den verken endekappe, trapes eller spalter - de ville
+       havnet utenfor viewporten og blitt klippet bort. Skraastillingen
+       alene er det som knytter den til soeylene. Ikke bygg en halv
+       dybdeeffekt for aa kompensere.
+
+       VINKELEN KOMMER FRA SOEYLENES EGEN --band-tilt, med motsatt
+       fortegn. Justeres soeylene, foelger denne med.
+
+       SKJOETEN. Rett over seksjonen staar .ss-principles--dark, maalt
+       til rgb(0,0,0): 40 px rein sort. Grunnen OVER flaten er derfor
+       ogsaa sort, saa de to smelter sammen - og den synlige skjoeten
+       blir flatens DIAGONALE overkant, der sort moeter hvitt. Den roede
+       streken ligger paa den kanten og foelger den.
+
+       UNDER flaten er grunnen hvit. Skillet mellom sort og hvitt ligger
+       paa seksjonens loddrette midtlinje, som en gradient med hardt
+       stopp. Det trenger ikke foelge diagonalen: flaten er 250 px hoy
+       og dekker midtlinja ved HVER x-verdi - maalt spenner overkanten
+       fra 3 til 66 px inn i en seksjon paa 319, saa 50 % ligger alltid
+       bak flaten. Skillet er dermed usynlig, og det eneste man ser er
+       sort over kanten og hvitt under.
+
+       LUFTA over og under er regnet ut, ikke gjettet: en flate som er
+       bredere enn skjermen og vippet v grader, spenner
+       bredde * sin(v) loddrett. Halvparten trengs i hver ende.
+       40px-linja er reserve for nettlesere uten sin() i calc().
+
+       TEKSTEN VIPPES MED FLATEN. Den ligger inne i det roterte
+       elementet, saa den kan ikke stikke utenfor kanten - boksen
+       roterer med. Maalt klaring staar i commit-meldingen. */
+    @media (min-width: 768px) {
+      html[data-page="index"] .ss-nettsidesjekk-band {
+        --skraa-bredde: calc(100vw + 8rem);
+        background: linear-gradient(to bottom, #000000 0 50%, #ffffff 50% 100%);
+        position: relative;
+        overflow: hidden;
+        padding-block: 40px;
+        padding-block: calc(0.5 * var(--skraa-bredde) * sin(var(--band-tilt)));
+      }
+      html[data-page="index"] .ss-nettsidesjekk-band__panel {
+        position: relative;
+        width: var(--skraa-bredde);
+        margin-left: calc(-0.5 * (var(--skraa-bredde) - 100vw));
+        transform: rotate(calc(-1 * var(--band-tilt)));
+        box-sizing: border-box;
+
+        /* Begge kantene tegnes av .ss-paint__line-elementene under, ikke
+           av border. En border kan ikke transformeres, og strekene skal
+           gli inn. Topplinja var 2px #ff1e3c border-top her; bunnlinja
+           var 1px #0a0a0a fra css/nettsidesjekk-cta.css. */
+        border-top: 0;
+        border-bottom: 0;
+      }
+
+      /* FRAMKANTEN - det som loefter flaten fra den hvite grunnen.
+         Maalt: flaten er rgb(241,241,241) og grunnen under den
+         rgb(255,255,255), altsaa L 0,880 mot 1,000. Verditrappa peker
+         feil vei - det som skal ligge oppaa er moerkere enn det som
+         ligger under - og derfor leser flaten som et hull i det hvite
+         framfor en plate paa det.
+
+         Soeylene loeser det samme med trapeset: en flate i --tra-fill
+         som vender vekk fra lyset. Her ligger den langs HELE flaten i
+         stedet for i enden, fordi seksjonen gaar i full bredde og en
+         endestabel ville blitt klippet av viewporten.
+
+         Den ligger INNE i silhuetten, ikke under den. Under flaten er
+         det 0,2 px plass i venstre ende paa 1440 - seksjonen er
+         noeyaktig den roterte flatens bokshoyde - saa alt som tegnes
+         der blir klippet i den ene enden og vifter ut i den andre.
+         Det var nettopp den kilen som felte den gamle bunnstreken.
+
+         7 % av panelhoyden. Minste maalte klaring fra laveste glyf ned
+         til framkanten er 26,5 px paa 1440 og 1200, 28,8 paa 1024 og
+         69,2 paa 768.
+
+         Ingen skygge: nettstedet har ingen fra foer. Alle elementer paa
+         forsiden og fem undersider er maalt, og det eneste treffet er
+         en innvendig ring paa .ss-video som dekker Loom-rammas
+         pillarbox. Aa innfoere en slagskygge her ville vaert et nytt
+         visuelt vokabular. */
+      html[data-page="index"] .ss-nettsidesjekk-band__panel::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 7%;
+        background: var(--tra-fill);
+        z-index: 1;
+      }
+      /* Strekene legges paa panelets egne kanter og roterer med det,
+         saa de foelger skjoeten i stedet for aa staa vannrett. */
+      html[data-page="index"] .ss-nettsidesjekk-band__line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        width: auto;
+        height: 2px;
+        z-index: 2;
+      }
+      html[data-page="index"] .ss-nettsidesjekk-band__line--top {
+        top: 0;
+        /* Den svarte 1px-en over den roede hoerer til den vannrette
+           varianten. Her ligger grunnen over flaten i rein sort, saa
+           den ville vaert usynlig og bare gjort streken 1px tykkere. */
+        border-top: 0;
+      }
+      /* Bunnstreken kommer tilbake, men UNDER framkanten, ikke over.
+         Den roede streken skal bety én ting begge steder: her slutter
+         flaten. Oeverst ligger den mellom den sorte grunnen og
+         betongen; nederst mellom framkanten og den hvite grunnen. Laa
+         den over framkanten i stedet, ville den oeverst markert
+         flatens ytterkant og nederst en skjoet inne i flaten - to
+         betydninger for samme strek.
+
+         Stabelen nedenfra og opp blir dermed: hvit grunn, 2px roed,
+         framkant i --tra-fill, betong. Den gamle 1px #0a0a0a paa
+         panelets underkant er tatt bort her; den roede streken
+         avslutter flaten alene. */
+      html[data-page="index"] .ss-nettsidesjekk-band__line--bottom {
+        bottom: 0;
+      }
+    }
+
+    /* STREKENE KOMMER INN FRA HOEYRE. assets/animations.js maler alle
+       .ss-paint__line med scaleX(0) -> scaleX(1) fra transform-origin:
+       left center. Her snus bare origo; varighet, kurve og observatoer
+       er de samme som ellers paa nettstedet. Flaten reiser seg mot
+       hoeyre, og strekene foelger den veien.
+
+       Bare origo overstyres, saa reduced-motion-blokka i animations.js
+       (transform: none !important) fortsatt slaar gjennom. */
+    html[data-page="index"] .ss-nettsidesjekk-band .ss-paint__line {
+      transform-origin: right center;
+    }
+
+    /* == Hero: ferdig komponert bakgrunnsbilde ========================
+       Betong, svart felt og 7-tall ligger i bildet. CSS styrer kun hoyde
+       og plassering.
+
+       FORSOEK - hoyden settes fra viewporten, ikke fra bredden.
+       Overflodig bildebredde beskjaeres fra venstre, der bildet er tomt.
+       Tidligere: min(160vw, 88vh) / min(66.667vw, 88vh) / min(47.619vw,
+       88vh) per breakpoint.
+
+       min-height, ikke height: heroen skal kunne vokse med innholdet
+       framfor aa la det flyte over.
+
+       560px-gulvet holder den lyse stripen (23,33 % av hoyden) hoyere
+       enn headeren paa 113px ogsaa paa korte viewporter: 0,2333 * 560
+       = 131px. */
+    .hero {
+      position: relative;
+      isolation: isolate;
+      width: 100%;
+      min-height: max(100vh, 560px);
+      overflow: hidden;
+      border-radius: 0;
+      /* Rent sort, ikke #050505: naar contain gir letterboxing under
+         7/4 skal baandene smelte sammen med videoens egen sorte flate. */
+      background: #000000;
+      /* Bunnforankret. Med H1-en flyttet ut staar bare de to knappene
+         igjen, og sentrert i en fullskjerms video ville de svevd.
+         .hero__media er absolutt og dermed ikke flex-item. */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    /* Tekstforankringen paa 0,2136 * boxH er revet ut. Den plasserte
+       blokken rett under betongens split; med video finnes ingen split,
+       og innholdet sentreres i stedet av justify-content paa .hero. */
+
+    /* 4,95vw er den hoyeste verdien som klarerer alle ti oppsettene med
+       minst 24px til stammen. To ulike tak binder:
+
+         - 1024 med slank chrome er stammebegrenset, paa 50,9px.
+         - 1366 og oppover er KOLONNEbegrenset, paa 73,5px. Det er
+           611 / 8,313 - hva MORGENDAGENS krever for aa faa plass i
+           rutenettets kolonne. Ryddes de 480 gap-pikslene av de 611,
+           forsvinner den grensen.
+
+       6vw ble proevd og forkastet: 1024 med slank chrome ryker med
+       -14px, altsaa H1-en inn i 7-tallet.
+
+       Under 768 er det ingen stamme aa kollidere med - der gaar hele
+       bredden til teksten, og 6vw beholdes. */
+    @media (min-width: 1024px) {
+      .hero .text-display {
+        font-size: clamp(2.25rem, 4.95vw, 4.5rem);
+      }
+    }
+    /* == Videobakgrunnen =============================================
+       object-fit avhenger av BOKSENS SIDEFORHOLD, ikke av bredden.
+       Kuttet cover gjoer er 1 - boksforhold/2,1667, saa det er forholdet
+       alene som avgjoer. Maalt: 1024x768 (forhold 1,62) kutter 25,2 %,
+       mens 1280x664 (forhold 1,93) kutter 11,0 % - samme retning, ulik
+       bredde. Derfor min-aspect-ratio og ikke min-width.
+
+       7/4 = 1,75 er terskelen: der kutter cover 19,2 %. Under den gaar
+       vi til contain, som paa 390x745 ville spart 75,8 % av bredden fra
+       aa bli klippet bort. Letterboxingen er usynlig fordi baade videoen
+       og heroen er sorte. */
+    .hero__media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      background-color: #000000;
+      border-radius: 0;
+      pointer-events: none;
+    }
+    @media (min-aspect-ratio: 7/4) {
+      .hero__media {
+        object-fit: cover;
+      }
+    }
+
+    /* reduced-motion: posteren som stillbilde framfor aa spille.
+       Loest i CSS, ikke JS, saa det reagerer naar brukeren endrer
+       innstillingen etter sidelast - moensteret finnes i 12 filer alt.
+
+       Posteren males paa .hero, ikke paa <video>: setter man visibility
+       eller opacity paa videoen, forsvinner elementets egen bakgrunn med
+       den. display: none hindrer ogsaa at nettleseren dekoder klippet,
+       som er poenget - en reduced-motion-bruker skal ikke ha en video
+       gaaende usynlig i bakgrunnen. */
+    @media (prefers-reduced-motion: reduce) {
+      .hero__media {
+        display: none;
+      }
+      .hero {
+        background-image: url("assets/hero-7s-poster.webp");
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) and (min-aspect-ratio: 7/4) {
+      .hero {
+        background-size: cover;
+      }
+    }
+
+    /* Forside-hero: mindre luft over headline, høyre kolonne på linje med venstre */
+
+    /* == Header paa forsiden: det som er forsidens eget ===============
+       Scopet med html[data-page="index"], saa den delte header-markupen
+       ikke roeres og de andre sidene ikke kan treffes - ingen av dem
+       har data-page="index". Blekk og flate ligger i css/header.css.
+
+       .is-stuck settes av assets/hero-header.js naar headeren har festet
+       seg. Uten JS staar den ugjennomsiktig, som i dag.
+
+       --header-h er headerens faktiske hoyde, regnet fra den delte
+       markupen: py-g4 (32+32) + logohoyden + 1px border-bottom.
+       Logoen er .site-logo, 44px og 52px fra 768, saa 109 / 117.
+       hero-header.js maaler den og overskriver verdien; disse tallene
+       er fallback for foerste frame og for no-JS. */
+    html[data-page="index"] {
+      --header-h: 109px;
+    }
+    @media (min-width: 768px) {
+      html[data-page="index"] { --header-h: 117px; }
+    }
+
+    /* == LOGOENS BLEKKBUNN, som heroteksten forankres til =============
+       IKKE headerens underkant. Logoens SVG er 82 brukerenheter hoy,
+       men blekket slutter paa 73,5 - de nederste 8,5 enhetene er tom
+       luft i tegningen. Skalert til 44px logo blir blekkbunnen 39,439px
+       inn i boksen, altsaa 71,439px fra headerens topp med py-g4 (32)
+       over.
+
+       Headeren er 109px. Differansen, 37,561px, er luft: 4,561px slark
+       i SVG-en pluss 32px py-g4 under logoen pluss 1px kantlinje.
+       Forankrer man teksten til --header-h, blir de 37,6 pikslene lagt
+       PAA klaringen uten aa telles med i den, og teksten starter
+       lavere enn den ser ut til.
+
+       Maalt paa selve fila: 28 rect-er spenner y 9,5-73,5 og de tre
+       path-ene naar 73,4261. 73,5 er altsaa den bindende verdien.
+
+       Endres .site-logo i css/header.css, foelger denne med - den er
+       skrevet som en brok av logohoyden nettopp derfor. */
+    html[data-page="index"] {
+      --logo-ink-b: calc(32px + 73.5 / 82 * 44px);   /* 71,439px */
+    }
+    @media (min-width: 768px) {
+      html[data-page="index"] {
+        --logo-ink-b: calc(32px + 73.5 / 82 * 52px); /* 78,610px */
+      }
+    }
+
+    /* Headeren er sticky og beholder derfor plassen sin i flyten. Uten
+       denne opptrekkingen starter betongen UNDER headeren, og da finnes
+       det ingenting aa vaere gjennomsiktig mot - bare body sin hvite
+       bakgrunn. Gjennomsiktigheten alene ville gitt samme hvite stripe.
+
+       Ikke portet bak .js: da ville no-JS faatt et ANNET oppsett. Slik
+       er oppsettet identisk i begge tilfeller, og bare malingen skiller.
+       Uten JS legger den hvite headeren seg over betongens oeverste
+       105/113px, som er kosmetisk og fullt lesbart.
+
+       margin-top kollapser ikke ut til <main>: main er flex-item
+       (body er flex flex-col), og flex-items etablerer egen
+       formatteringskontekst. */
+    html[data-page="index"] .hero {
+      margin-top: calc(-1 * var(--header-h));
+    }
+
+    /* Header-kompensasjonen paa .index-hero-inner er fjernet. Den skjov
+       innholdet ned forbi headeren da blokken laa oeverst; naa er den
+       bunnforankret, og heroen er hoyere enn headeren uansett. */
+
+    /* == Headerens blekk og flate ligger i css/header.css ============
+       Delt med panelsiden og skrevet av assets/hero-header.js, som er
+       eneste eier av headertilstanden. Her staar bare det som er
+       forsidens eget: --header-h, logoens blekkbunn og heroens
+       opptrekking. Sidene merkes i markupen: data-header-flip="hero"
+       paa <html>, data-header-ink="light" paa de moerke seksjonene, og
+       data-header-fill="transparent" paa heroen alene. */
+
+    /* Sjiktet bak teksten er fjernet sammen med H1-en. Det fantes for
+       aa loefte hvit tekst over den roede geometrien - malt over alle 149
+       framene ville hvit tekst ligget under AA paa opptil 61,55 % av
+       flaten. Knappene har ugjennomsiktig eget fyll og trenger det ikke.
+
+       KOMMER TEKST TILBAKE I HEROEN, maa sjiktet med. Verdien var
+       rgba(0,0,0,0.30) med 40px ramper, som ga 6,89:1 mot den lyseste
+       pikselen i klippet - rgb(255,29,67).
+*/
+
+    /* == H1 i heroen: oeverst til venstre =============================
+       Plasseringen er malt, ikke valgt paa foelelse. Roed dekning per
+       omraade, median over alle 149 frames:
+
+              venstre   midten    hoyre
+         topp     8,3 %   23,1 %   14,8 %
+         midt    12,9 %   19,1 %   18,4 %
+         bunn    18,2 %   24,2 %   26,9 %
+
+       Oeverst til venstre er roligst med god margin - en tredjedel av
+       nede-til-hoyre. Maks er 75 % overalt, saa ingen plassering slipper
+       unna sjiktet, men medianen avgjoer hvor ofte det maa jobbe.
+
+       Absolutt posisjonert fra headerens underkant, ikke i flyten, saa
+       avstanden er den samme uansett hvor mange linjer teksten faar. */
+    .hero__content {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(var(--header-h) + clamp(2rem, 6vh, 5rem));
+      z-index: 1;
+    }
+    /* LIGGENDE: blokken sto for hoyt. 6vh ga 61,4 px mellom headerens
+       underkant og H1-boksen paa 1366x1024, 54,0 paa 1440x900 og 46,1
+       paa 1024x768 (maalt). 13vh gir 133,1 / 117,0 / 99,8, og knappene
+       slutter 424 px over heroens bunn paa 1366x1024.
+       Scopet med samme terskel som hoykantoppsettet, saa staaende ikke
+       roeres - der er .hero__content dessuten display: contents, og
+       top har ingen virkning. */
+    @media (min-aspect-ratio: 4/5) {
+      .hero__content {
+        top: calc(var(--header-h) + clamp(2rem, 13vh, 9rem));
+      }
+    }
+    .hero__content h1 {
+      color: #ffffff;
+      /* 60 % av rutenettets innerbredde. Bredere gir to linjer paa 1440,
+         smalere sprenger MORGENDAGENS - ordet er 8,313 em og kan ikke
+         brytes. */
+      max-width: 60%;
+    }
+    @media (max-width: 767px) {
+      .hero__content h1 {
+        max-width: none;
+      }
+    }
+
+    /* == CTA-ene under H1-en =========================================
+       Side ved side fra 640px, stablet under.
+
+       Terskelen er maalt, ikke valgt: knappene er 215 og 214px brede med
+       px-g5 (40+40) rundt teksten, og med 24px gap trenger raden 453px.
+       Den passer fra 517px viewport. 640 er sidens egen sm-breakpoint og
+       gir 123px margin - naermere grensa ville raden brutt paa
+       skriftfallback eller brukerens zoom.
+
+       Ingen skraakant. Den ble fjernet i 88f9a6f fordi 7-tallets stamme
+       forsvant, og heroen har ingen skraa referanse naa. */
+    .index-hero-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+      margin-top: clamp(1.75rem, 4vh, 2.5rem);
+    }
+    @media (min-width: 640px) {
+      .index-hero-actions {
+        flex-direction: row;
+        align-items: center;
+        gap: 1.5rem;
+      }
+    }
+    .index-hero-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      min-height: 80px;
+      padding: 0 40px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: background-color 200ms linear, color 200ms linear,
+                  border-color 200ms linear;
+    }
+    /* Primaeren: ugjennomsiktig fyll, saa teksten er 19,80:1 uansett hva
+       videoen gjoer bak. Flaten selv er 3,82:1 mot roedt, over 3:1-gulvet
+       for ikke-tekst. */
+    .index-hero-btn--solid {
+      background-color: #ffffff;
+      color: #0a0a0a;
+      border: 2px solid #ffffff;
+    }
+    .index-hero-btn--solid:hover {
+      background-color: transparent;
+      color: #ffffff;
+    }
+    /* Sekundaeren: 2px ramme, ikke 1. Kontrasttallet er det samme -
+       3,82:1 mot roedt - men en 1px hvit strek mot en tett, bevegelig
+       video forsvinner optisk lenge foer den forsvinner matematisk:
+       antialiasing deler den over to pikselrader, og oeyet mister en
+       halvpikslet linje som beveger seg. 2px holder streken hel. */
+    .index-hero-btn--outline {
+      background-color: transparent;
+      color: #ffffff;
+      border: 2px solid #ffffff;
+    }
+    .index-hero-btn--outline:hover {
+      background-color: #ffffff;
+      color: #0a0a0a;
+    }
+    .index-hero-btn:focus {
+      outline: none;
+    }
+    .index-hero-btn:focus-visible {
+      box-shadow: 0 0 0 2px #0a0a0a, 0 0 0 5px #ffffff;
+    }
+
+    /* == Under 1024: H1 i det sorte feltet over, knapper i det under ==
+       Videoen er letterbokset av contain, og de sorte feltene er store
+       nok til aa baere innholdet paa alt fra 360x700 og opp.
+
+       H1-en henger i LOGOENS blekkbunn pluss 16px (C), ikke i
+       headerens underkant - se --logo-ink-b. Forskjellen er 53,561px
+       paa mobil: 37,561px ubrukt header pluss de 16px paddingen ble
+       kuttet fra.
+
+       .index-hero-text spenner hele hoyden under headeren og fordeler
+       med space-between: H1 mot toppen, knappene mot bunnen, videoen i
+       gapet mellom.
+
+       BAANDHOYDEN er kappet: min(46.154vw, 37%). Foerste ledd er
+       contain-hoyden (1/2,1667 av bredden), andre er taket som gjor at
+       768x900 faar plass - der gir contain 354px mot 344 tillatt.
+       Paa 390 og 430 binder foerste ledd, saa baandet er uendret der.
+
+       object-fit: cover i den kappede boksen: paa 390 og 430 er boksen
+       eksakt videoens forhold, saa ingenting beskjaeres. Paa 768 blir
+       6 % beskaaret loddrett framfor at det kommer svarte felt paa
+       sidene, som contain ville gitt.
+
+       SJIKTET GJELDER OGSAA HER. Kommentaren sa tidligere at det var
+       fjernet under 1024 fordi teksten laa paa #000000 - det stemte
+       ikke, paa to maater.
+
+       For det foerste var regelen som skulle fjerne det, content: none
+       i denne blokka, uvirksom: basisregelen .index-hero-text::before
+       staar SENERE i kilden og har samme spesifisitet (0,1,1), for en
+       @media legger ikke til spesifisitet. Maalt i Chromium var content
+       fortsatt "" paa 360px. Den doede regelen er tatt ut.
+
+       For det andre er premissen borte: paa 360x640 naar siste linje
+       ned i videobaandet, saa teksten ligger PAA video der.
+
+       OVERLAPPET ER 4,55px, OG DET ER MED VILJE. Versalbunnen ligger
+       paa 241,475, baandtoppen paa 236,930 - fire malte pikselrader,
+       y 237-240. Maalt i Chromium med inngangsanimasjonen ferdigspilt;
+       maaler du foer den er ferdig, faar du opptil 1,3px for mye.
+
+       Ikke fjern det ved aa krympe baandet. 360x640 er
+       Galaxy S5-generasjonen; dagens smaa Android-telefoner ligger paa
+       360x800, som gaar opp med god margin. Aa skalere animasjonen ned
+       til 13 % av flaten for alle for aa berge en utdoeende opploesning
+       er feil avveining. 360x700 har +25,45px klaring, 390x745 +81,34.
+
+       Maalt mot frame 19 (0-basert, t = 19/30 s), de 195 tekstpikslene
+       som ligger paa baandet: med sjiktet 7,03:1 som verste piksel,
+       null under AA. Uten sjiktet 3,88:1, og 60 % av dem faller under
+       4,5:1. 36px bold er stor tekst, saa AA-gulvet er 3:1 - ingen
+       piksler under det i noen av tilfellene, men sjiktet gjoer reell
+       jobb her. */
+    @media (max-width: 1023px) {
+      .hero__media {
+        top: 50%;
+        bottom: auto;
+        height: min(46.154vw, 37%);
+        transform: translateY(-50%);
+        object-fit: cover;
+      }
+      .hero__content {
+        top: calc(var(--logo-ink-b) + 16px);
+        bottom: 0;
+      }
+      .hero__content > div {
+        height: 100%;
+      }
+      .index-hero-text {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        /* 0, ikke 32: klaringen ligger i --logo-ink-b + 16px over.
+           Beholdes 32 her, legges den PAA C og forankringen betyr
+           ingenting. padding-bottom er en annen sak - den holder
+           knappene av bunnkanten og staar. */
+        padding-top: 0;
+        padding-bottom: 32px;
+      }
+      .index-hero-actions {
+        margin-top: 0;
+      }
+    }
+
+    /* == HOEYKANT: HEROEN BLIR SAA HOEY SOM INNHOLDET ================
+       H1, video, og knappene 24 px under videoen. Erstatter oppsettet
+       der .index-hero-text spente hele hoyden med space-between, saa
+       knappene havnet i bunnen av en fullskjerms hero - 386 px under
+       videoen paa 960x1440, og 45-55 % av heroen sto som tom sort
+       flate (maalt).
+
+       TERSKELEN ER SIDEFORHOLD, IKKE BREDDE OG IKKE orientation.
+       Bredde alene bommer: 1032x1376 er et nettbrett paa hoeykant, men
+       faar desktop-oppsettet fordi 1032 > 1023. Ren orientation bommer
+       andre veien: et smalt desktopvindu er ogsaa hoeyere enn bredt.
+       4/5 = 0,8 ligger mellom de to: maalte enheter er 0,46-0,75 og
+       treffes, et vindu paa 1200x1300 er 0,923 og staar uendret.
+
+       display: contents paa de tre mellomleddene loefter H1 og
+       knappene opp i heroens eget rutenett, saa rekkefoelgen kan settes
+       uten aa flytte noe i markupen. Alle tre er rene layout-div-er
+       uten rolle, aria, id eller tabindex; tilgjengelighetstreet er
+       maalt identisk med og uten. Det de BAR av layout er tatt over
+       her: max-w-grid blir grid-template-columns minmax(0, 1200px)
+       med justify-content: center, og px-g4/md:px-g6 blir heroens egen
+       sidepadding.
+
+       Sjiktet bak teksten slaas av: i dette oppsettet staar H1 paa
+       heroens egen sorte flate, ikke paa video. Hvit paa #000000 er
+       21:1. */
+    @media (max-aspect-ratio: 4/5) {
+      .hero {
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1200px);
+        justify-content: center;
+        align-content: start;
+        row-gap: 24px;
+        padding: calc(var(--header-h) + 24px) 32px 40px;
+        box-sizing: border-box;
+      }
+      .hero__media {
+        position: static;
+        inset: auto;
+        transform: none;
+        width: 100%;
+        height: auto;
+        /* filas eget forhold, saa cover ikke beskjaerer noe */
+        aspect-ratio: 1898 / 876;
+        object-fit: cover;
+        order: 2;
+      }
+      .hero__content {
+        position: static;
+        top: auto;
+        bottom: auto;
+      }
+      .hero__content,
+      .hero__content > div,
+      .index-hero-text {
+        display: contents;
+      }
+      .index-hero-text::before {
+        content: none;
+      }
+      .hero__content h1 {
+        order: 1;
+        max-width: none;
+      }
+      .index-hero-actions {
+        order: 3;
+        margin-top: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      /* hoyden staar paa 80 px som foer; bare bredden endres */
+      .index-hero-btn {
+        padding: 0 16px;
+        white-space: normal;
+        text-align: center;
+      }
+    }
+    @media (max-aspect-ratio: 4/5) and (min-width: 768px) {
+      .hero {
+        padding-left: 48px;
+        padding-right: 48px;
+      }
+    }
+    /* Under 520 px staar knappene under hverandre, som de gjoer i
+       basisoppsettet under sidens egen sm-breakpoint. */
+    @media (max-aspect-ratio: 4/5) and (max-width: 520px) {
+      .index-hero-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* REDUSERT BEVEGELSE I DETTE OPPSETTET. Basisregelen skjuler
+       <video> med display: none - den skal ikke dekodes - og maler
+       posteren paa .hero i stedet. Det virker naar heroen er en
+       fullskjerms boks, men her er videoen en RAD i rutenettet: raden
+       kollapser, heroen krymper fra 735 til 377 px, og posteren blir
+       staaende bak H1-en og knappene (maalt paa 820x1180).
+
+       Posteren faar derfor sin egen rad, med samme forhold og samme
+       plass som videoen hadde, og flaten paa .hero slaas av. Teksten
+       blir liggende paa heroens sorte flate, ikke paa motivet. */
+    @media (max-aspect-ratio: 4/5) and (prefers-reduced-motion: reduce) {
+      .hero {
+        background-image: none;
+      }
+      .hero::before {
+        content: "";
+        order: 2;
+        display: block;
+        width: 100%;
+        aspect-ratio: 1898 / 876;
+        background-image: url("assets/hero-7s-poster.webp");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+    }
+
+    /* == Sjiktet tilbake ==============================================
+       Fjernet i 8a9e024 da teksten forsvant ut av heroen; verdien laa i
+       en kommentar. Hvit tekst mot #FF1E3C er 3,82:1, roedt dekker 23 %
+       av framen i median og opptil 64 %, og geometrien beveger seg - saa
+       teksten ligger over roedt uansett plassering.
+
+       Alfa 0,30 er malt mot den lyseste pikselen i HELE klippet,
+       rgb(255,29,67): den blir rgb(178,20,47) og gir 6,89:1.
+
+       Rampene er 40px i absolutt maal og matcher inset-overskytingen
+       noeyaktig; med prosentstopp spiste rampen inn i foerste og siste
+       linje.
+
+       z-index -1 loeftes til .hero__content (z-index 1), siden
+       .index-hero-text er relative uten egen z-index og derfor ikke
+       lager stablingskontekst. Sjiktet havner over videoen, under
+       teksten. */
+    .index-hero-text::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: -40px 0;
+      margin-inline: -48px;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0,
+        rgba(0, 0, 0, 0.3) 40px,
+        rgba(0, 0, 0, 0.3) calc(100% - 40px),
+        rgba(0, 0, 0, 0) 100%
+      );
+      pointer-events: none;
+    }
+
+    /* 5vw, ikke 6: den gir TRE linjer paa 1024, 1440 og 1920, altsaa
+       samme brekk over hele desktop. 6vw treffer 80px-taket paa 1440 uten
+       at containeren vokser tilsvarende, og gir fire linjer der men tre
+       paa 1024 - et brekk som skifter midt i omraadet. */
+    .hero .text-display {
+      font-size: clamp(2.25rem, 5vw, 4.5rem);
+    }
+
+    /* Hero-CTA-ene er flyttet til Om-seksjonen. Det som forsvant med
+       dem, og hvorfor:
+
+       --skew-x / --skew-step. Skraakanten speilet 7-tallets stamme,
+       maalt til 26,0 graders korde, og --skew-step fantes utelukkende
+       for at de to knappenes diagonaler skulle danne EN ubrutt linje.
+       Presisjonen var hele begrunnelsen, og begge referansene er borte:
+       stammen finnes ikke i videoen, og Om-seksjonen har ingen andre
+       skraa kanter. En 26-graders diagonal der ville vaert dekorasjon.
+
+       drop-shadow. Den ga knappene en kant mot roed geometri - sort
+       skygge, usynlig mot videoens sorte flate (1,00:1). Mot betongen
+       er den 7,17:1, altsaa en tydelig moerk halo i et oppsett som
+       ellers ikke har skygger.
+
+       De fylte flatene. #ffffff ga 1,26:1 mot betongens moerkeste
+       hundredel - knappen forsvant. Om-seksjonens egen variant,
+       border-ink med ink tekst, gir 15,72:1.
+
+       Fokusringen fulgte med: den var totrinns fordi hvit alene smeltet
+       sammen med den naer-hvite betongknappen. Den lyse varianten
+       bruker sidens vanlige focus-visible:ring-accent.
+
+       Sjiktet bak teksten gikk i 8a9e024. Trengs det igjen, var verdien
+       rgba(0,0,0,0.30) med 40px ramper - 6,89:1 mot den lyseste
+       pikselen i klippet, rgb(255,29,67). */
+
+    /* H1-gulvet under 768. Kommentaren sa foer at 2.25rem holder
+       overskriften paa TRE linjer helt ned til 360px. Det stemmer ikke,
+       og har antakelig aldri gjort det.
+
+       Maalt i Chromium: 360px gir FIRE linjer. Bruddet kommer fordi
+       "NETTSIDER, I DAG" maaler 304,25px mot 296px tilgjengelig
+       (360 minus px-g4 paa 32 i hver side) - 8,25px for bredt. Ordparet
+       kan ikke brytes: nbsp binder I og DAG.
+
+              360   4 linjer
+              390   3 linjer   (326px tilgjengelig, 304,25 gaar inn)
+              430   3 linjer
+              768   3 linjer   (38,4px skrift, 324,55 mot 403,2)
+
+       2.25rem er fortsatt gulvet, men grunnen er en annen enn linjetall:
+       MORGENDAGENS maaler 7,987 em og kan ikke brytes. Paa 360px er
+       tekstspalten 296px, saa ordet sprenger den over 37,06px skrift.
+       2.25rem (36px) gir 287,52px og er det stoerste kvart-rem-steget
+       som gaar inn.
+
+       2.5rem (40px) er maalt og forkastet: MORGENDAGENS blir 319,47px
+       og stikker 23,47px ut av spalten, 390 faller fra tre linjer til
+       fire, og overlappet paa 360x640 vokser fra 4,55px til 21,90px.
+       360x700 holder saa vidt ogsaa da, +8,10px - men de tre andre
+       grunnene holder. */
+    @media (max-width: 767px) {
+      .hero .text-display {
+        font-size: clamp(2.25rem, 6vw, 4.5rem);
+      }
+    }
+    /* Den gamle Hero-CTA-blokken laa her: stablede, LIKE brede knapper i
+       20rem fra 640px. Den sto etter den nye i kilden og vant derfor
+       kaskaden - .index-hero-actions .index-hero-btn { width: 100% } har
+       spesifisitet (0,2,0) og ville overstyrt --btn-w-top/--btn-w-bottom,
+       som gjorde begge knappene like brede og brot diagonalen. Fjernet. */
+
+    /* Prinsippseksjon — flat Swiss søyle, integrert tilt, separat tekst-inset */
+    .ss-principle-stream-wrap {
+      overflow-x: clip;
+      --grid-max: 75rem;
+      --grid-pad: clamp(1rem, 4vw, 3rem);
+      --body-w: min(calc(100% - 2 * var(--grid-pad)), 30rem);
+    }
+    .ss-principle-stream {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(1.375rem, 3.5vw, 1.875rem);
+    }
+    /* == SKRAASTILLINGEN, DELT KILDE ==================================
+       --band-tilt laa foer paa .ss-principle-row. Den er flyttet hit
+       fordi nettsidesjekk-seksjonen ogsaa bruker den, og de to skal
+       foelge hverandre: justeres vinkelen, flytter begge seg.
+
+       Soeylene faar noeyaktig samme verdier som foer - 0,75 / 2 / 2,5
+       grader paa de tre bruddpunktene. Flyttingen er ren refaktorering.
+       .ss-principle-row--from-right setter fortsatt sin egen negative
+       verdi og overstyrer arven, som foer.
+
+       Nettsidesjekk-seksjonen bruker MOTSATT fortegn av denne. */
+    html[data-page="index"] {
+      --band-tilt: 0.75deg;
+
+      /* --tra-fill laa foer paa .ss-principle-row. Flyttet hit av samme
+         grunn som --band-tilt over: nettsidesjekk-flaten bruker den til
+         framkanten sin, og de to skal foelge hverandre. Soeylene arver
+         den ned og faar noeyaktig samme verdi som foer. */
+      --tra-fill: #bfbfbf;
+    }
+    @media (min-width: 768px) {
+      html[data-page="index"] { --band-tilt: 2deg; }
+    }
+    @media (min-width: 1024px) {
+      html[data-page="index"] { --band-tilt: 2.5deg; }
+    }
+
+    .ss-principle-row {
+      --band-h: 3.375rem;
+      --cap-y: 0.625rem;
+      --stage-v-buffer: 0.625rem;
+      --band-fill: #eeeeee;
+      --band-edge: #d6d6d6;
+
+      /* == ENDEGEOMETRIEN, som forhold av baandets egen hoyde =========
+         --band-h er 54 / 62 / 68 px paa de tre bruddpunktene. Faste
+         piksler ville gjort trapeset til en strek paa mobil, saa alt
+         her er brok av H. Endre H, og hele stabelen foelger.
+
+         Fargeregelen bak tallene: flatene blir lysere og kortere jo
+         lenger BAK de ligger. Baandet er bakerst (marmor, lysest,
+         1,00 H), trapeset midt i (0,93-1,23 H), endekappen forrest
+         (1,33 H). Endekappen var #c4c4c4 - moerkere enn baandet, saa
+         den braut ikke regelen, men gaar ned til #b3b3b3 for aa skille
+         seg fra trapeset rett bak. */
+      --cap-fill: #b3b3b3;
+
+      --cap-w: calc(0.3 * var(--band-h));
+      --cap-h: calc(1.33 * var(--band-h));
+      --cap-r: calc(0.029 * var(--band-h));
+
+      /* Én verdi, brukt paa BEGGE spaltene. Laa foer hardkodet som
+         7 / 10 / 13 px i tre ulike regelblokker. */
+      --spalte: calc(0.057 * var(--band-h));
+
+      --tra-w: calc(0.129 * var(--band-h));
+      --tra-h: calc(1.23 * var(--band-h));      /* kanten mot kappen */
+      --tra-h-lav: calc(0.93 * var(--band-h));  /* kanten mot baandet */
+      /* Halve hoydeforskjellen - det trapeset trekker seg inn med paa
+         den lave kanten. Brukes direkte i clip-path, saa de to
+         kanthoydene over er de eneste tallene som staar skrevet. */
+      --tra-inn: calc((var(--tra-h) - var(--tra-h-lav)) / 2);
+
+      /* Fra baandets kant til kappens: spalte + trapes + spalte. */
+      --stabel: calc(2 * var(--spalte) + var(--tra-w));
+      --headline-y: 0.45rem;
+      /* 0deg, ikke 0.2deg. Verdien hadde SAMME fortegn som --band-tilt,
+         og siden __headline er barn av __pillar komponerte rotasjonene:
+         teksten sto paa 0,95 grader mot baandets 0,75. Det ga ~1px
+         loddrett drift over en typisk tekstlengde - nok til aa lese som
+         ikke helt parallell.
+         translateY beholdes; den er optisk sentrering i baandet. */
+      --headline-tilt: 0deg;
+      --headline-inset: clamp(1.75rem, 7vw, 3rem);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .ss-principle-row--from-right {
+      --band-tilt: -0.75deg;
+    }
+    .ss-principle-row__stage {
+      position: relative;
+      overflow: visible;
+      width: 100%;
+      min-height: calc(var(--band-h) + 2 * var(--cap-y) + var(--stage-v-buffer));
+      margin-bottom: calc(var(--stage-v-buffer) * 0.6);
+    }
+    .ss-principle-row + .ss-principle-row .ss-principle-row__stage {
+      margin-top: calc(var(--stage-v-buffer) * 0.35);
+    }
+    .ss-principle-row__pillar {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: calc(var(--band-h) + 2 * var(--cap-y));
+      margin-top: calc(-0.5 * (var(--band-h) + 2 * var(--cap-y)));
+      transform: rotate(var(--band-tilt));
+      pointer-events: none;
+    }
+    .ss-principle-row--from-left .ss-principle-row__pillar {
+      transform-origin: left center;
+    }
+    .ss-principle-row--from-right .ss-principle-row__pillar {
+      transform-origin: right center;
+    }
+    /* Scroll-reveal: pillar (bånd + heading) glir inn per rad */
+    .ss-principle-row {
+      --reveal-x: 0;
+      --reveal-y: 0.625rem;
+      --reveal-scale: 0.97;
+    }
+    .ss-principle-row--from-left {
+      --reveal-x: -1.25rem;
+    }
+    .ss-principle-row--from-right {
+      --reveal-x: 1.25rem;
+    }
+    html.ss-principles-reveal .ss-principle-row:not(.is-visible) .ss-principle-row__pillar {
+      opacity: 0;
+      transform: rotate(var(--band-tilt)) translate3d(var(--reveal-x), var(--reveal-y), 0)
+        scale(var(--reveal-scale));
+    }
+    html.ss-principles-reveal .ss-principle-row:not(.is-visible) .ss-principle-row__body-wrap {
+      opacity: 0;
+      transform: translate3d(0, 0.5rem, 0);
+    }
+    html.ss-principles-reveal .ss-principle-row.is-visible .ss-principle-row__pillar {
+      opacity: 1;
+      transform: rotate(var(--band-tilt)) translate3d(0, 0, 0) scale(1);
+      transition:
+        opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html.ss-principles-reveal .ss-principle-row.is-visible .ss-principle-row__body-wrap {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      transition:
+        opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.14s,
+        transform 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.14s;
+    }
+    /* Marmortekstur paa baandet. To bakgrunnslag paa ETT element, saa
+       ingen ny DOM og ::after staar urort - den brukes bade til
+       endehetten og til den roede underkanten paa annenhver rad.
+
+       MARMOR, IKKE BETONG. assets/marmor.webp (1448x1086) erstattet
+       hvit-betong.webp her og BARE her - Om-seksjonen over bruker
+       fortsatt betongen. background-size: auto tegner bildet 1:1 i
+       CSS-piksler, og det stoerste baandet er 1178 px bredt fra 1440
+       og opp, saa bildet dekker med 270 px til overs paa hver side.
+       Paa 2x-skjerm skaleres BEGGE bildene 2x, saa det er ingen
+       forskjell i skarphet mellom dem av den grunn.
+
+       Det hvite sjiktet ligger paa 0,35. Marmorens moerkeste hundredel
+       er 215 (betongens var 229), saa under sjiktet lander den paa
+       0,35*255 + 0,65*215 = 229 - ni trinn moerkere enn --band-fill
+       #eeeeee. Titlene taaler det med god margin; de roede numrene
+       laa allerede under 4,5:1 paa betongen og faller mer paa
+       aarene. Maalt per element i commit-meldingen.
+
+       --band-fill staar under som reserve hvis bildet ikke laster.
+
+       Bildet er en EGEN nedlasting (55,6 kB); betongen laa i cachen
+       fra Om-seksjonen. Ingen preload: baandene ligger langt nede. */
+    .ss-principle-row__band {
+      position: absolute;
+      top: var(--cap-y);
+      height: var(--band-h);
+      width: min(calc(94vw + 1rem), calc(40rem + 1rem));
+      background-color: var(--band-fill);
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
+        url("assets/marmor.webp");
+      /* auto, ikke cover. Baandet er 656x54, altsaa forhold 12,15 mot
+         bildets 2,10 - cover ville da skalert mot BREDDEN og presset
+         hele bildet inn i baandbredden framfor aa beskjaere. Kornet ble
+         2,8x finere enn heroen paa desktop og 5x paa mobil, og den
+         loddrette sprekken dukket opp i alle sju baandene paa samme
+         relative x. Med auto er hvert baand et ekte vindu ut i samme
+         materiale. */
+      background-size: auto;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-block: 1px solid var(--band-edge);
+      box-shadow: none;
+    }
+    .ss-principle-row--from-left .ss-principle-row__band {
+      left: -1rem;
+      right: auto;
+    }
+    .ss-principle-row--from-right .ss-principle-row__band {
+      left: auto;
+      right: -1rem;
+    }
+    /* == SOEYLENS ENDE ===============================================
+       Utover fra baandet: baand - spalte - trapes - spalte - endekappe.
+
+       Radene veksler retning, saa geometrien speiles. Hver rad har
+       noeyaktig TO pseudoelementer, og begge er i bruk:
+         fra venstre:  ::before = trapes,  ::after  = endekappe
+         fra hoyre:    ::after  = trapes,  ::before = endekappe
+       Trapesets HOEYE kant vender alltid mot endekappen. Ingen ny
+       markup - ::after ble ledig paa partallsradene da den roede
+       streken gikk.
+
+       Alle fire flatene sentreres om samme vannrette akse med
+       translateY(-50%), framfor symmetrisk overheng som foer. Da er
+       hoyden det eneste tallet som trengs per flate.
+
+       TRAPESET ER clip-path, ikke border-trikset. Et pseudoelement er
+       et rektangel. Border-trikset ville gjort fargen til en
+       border-color og bundet innrykkingen til border-bredden - to
+       verdier som maa holdes i takt for haand, og som ikke kan uttrykke
+       seg i brok av H. clip-path tar formen i elementets egne
+       koordinater, saa den foelger --band-h av seg selv, og
+       --tra-inn kan settes inn direkte. Teknikken er allerede i
+       prosjektets egen CSS: .ss-pillar-base i css/styles.css bruker
+       clip-path: polygon(). -webkit-clip-path staar foerst for Safari
+       under 13.1. */
+    .ss-principle-row--from-left .ss-principle-row__band::before,
+    .ss-principle-row--from-left .ss-principle-row__band::after,
+    .ss-principle-row--from-right .ss-principle-row__band::before,
+    .ss-principle-row--from-right .ss-principle-row__band::after {
+      content: "";
+      position: absolute;
+      box-sizing: border-box;
+      top: 50%;
+      transform: translateY(-50%);
+      box-shadow: none;
+    }
+    /* Endekappen: forrest, hoyest, moerkest.
+
+       INGEN KANTLINJE. Den hadde 1px #d6d6d6 fra den tida kappen var
+       #c4c4c4 og eneste flate i enden. Naa er kappen #b3b3b3, og en
+       kant paa 214 er lysere enn baade den (179) og trapeset (191).
+       Valoerregelen hele effekten hviler paa sier at lysere er lenger
+       BAK - en kant som er lysest av alt leser da som at kanten ligger
+       bakerst, altsaa motsatt av at kappen staar forrest.
+
+       Maalt paa alle flatene i seksjonen: kappen var den eneste med
+       kant lysere enn sitt eget fyll. Baandets kant er #d6d6d6 paa
+       #eeeeee - moerkere enn fyllet, og leser riktig som kant. Den
+       staar. Trapeset har aldri hatt kantlinje.
+
+       box-sizing er border-box, saa ytterkassa er fortsatt noeyaktig
+       0,30 x 1,33 H. */
+    .ss-principle-row--from-left .ss-principle-row__band::after,
+    .ss-principle-row--from-right .ss-principle-row__band::before {
+      width: var(--cap-w);
+      height: var(--cap-h);
+      background-color: var(--cap-fill);
+      border: none;
+      border-radius: var(--cap-r);
+    }
+    /* Trapeset: mellom baand og kappe, lavere enn begge i begge ender. */
+    .ss-principle-row--from-left .ss-principle-row__band::before,
+    .ss-principle-row--from-right .ss-principle-row__band::after {
+      width: var(--tra-w);
+      height: var(--tra-h);
+      background-color: var(--tra-fill);
+      border: none;
+      border-radius: 0;
+    }
+    .ss-principle-row--from-left .ss-principle-row__band::before {
+      left: 100%;
+      right: auto;
+      margin-left: var(--spalte);
+      -webkit-clip-path: polygon(0% var(--tra-inn), 100% 0%, 100% 100%, 0% calc(100% - var(--tra-inn)));
+      clip-path: polygon(0% var(--tra-inn), 100% 0%, 100% 100%, 0% calc(100% - var(--tra-inn)));
+    }
+    .ss-principle-row--from-left .ss-principle-row__band::after {
+      left: 100%;
+      right: auto;
+      margin-left: var(--stabel);
+    }
+    .ss-principle-row--from-right .ss-principle-row__band::after {
+      right: 100%;
+      left: auto;
+      margin-right: var(--spalte);
+      -webkit-clip-path: polygon(0% 0%, 100% var(--tra-inn), 100% calc(100% - var(--tra-inn)), 0% 100%);
+      clip-path: polygon(0% 0%, 100% var(--tra-inn), 100% calc(100% - var(--tra-inn)), 0% 100%);
+    }
+    .ss-principle-row--from-right .ss-principle-row__band::before {
+      right: 100%;
+      left: auto;
+      margin-right: var(--stabel);
+    }
+    .ss-principle-row__headline {
+      position: absolute;
+      z-index: 2;
+      top: var(--cap-y);
+      left: 0;
+      right: 0;
+      height: var(--band-h);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.875rem;
+      transform: translateY(var(--headline-y)) rotate(var(--headline-tilt));
+      transform-origin: 28% center;
+      pointer-events: auto;
+    }
+    .ss-principle-row--from-left .ss-principle-row__headline {
+      justify-content: flex-start;
+      padding-left: var(--headline-inset);
+      padding-right: 2rem;
+    }
+    .ss-principle-row--from-right .ss-principle-row__headline {
+      justify-content: flex-end;
+      padding-right: var(--headline-inset);
+      padding-left: 2rem;
+      transform-origin: 72% center;
+    }
+    .ss-principle-row__num {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      line-height: 1;
+      flex-shrink: 0;
+      align-self: center;
+      padding-top: 0.1em;
+    }
+    .ss-principle-row__title {
+      margin: 0;
+      font-size: clamp(1.375rem, 4vw + 0.25rem, 1.625rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.022em;
+      overflow-wrap: normal;
+    }
+    .ss-principle-row__body-wrap {
+      width: var(--body-w);
+      max-width: var(--body-w);
+      margin-inline: auto;
+      padding-inline: 0;
+      padding-bottom: 0.375rem;
+      position: relative;
+      z-index: 1;
+    }
+    .ss-principle-row--from-left .ss-principle-row__body-wrap {
+      margin-left: max(var(--grid-pad), calc((100% - min(100%, var(--grid-max))) / 2 + var(--grid-pad)));
+      margin-right: auto;
+    }
+    .ss-principle-row--from-right .ss-principle-row__body-wrap {
+      margin-left: auto;
+      margin-right: max(var(--grid-pad), calc((100% - min(100%, var(--grid-max))) / 2 + var(--grid-pad)));
+    }
+    .ss-principle-row__body {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.6;
+      font-weight: 500;
+      letter-spacing: 0.006em;
+    }
+    .ss-principle-row__stat {
+      display: block;
+      font-size: clamp(1.625rem, 3.5vw + 0.5rem, 2.5rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: inherit;
+      margin-bottom: 0.4375rem;
+    }
+    .ss-principle-row__stat--inline {
+      display: inline;
+      font-size: clamp(1.25rem, 2vw + 0.45rem, 1.75rem);
+      line-height: inherit;
+      margin-bottom: 0;
+      letter-spacing: -0.025em;
+    }
+    .ss-principle-row__stat--count .ss-principle-row__stat-count__num {
+      display: inline-block;
+      min-width: 2.25ch;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+    .ss-principle-row__stat--count.is-counting {
+      color: #ff1e3c;
+    }
+    .ss-principle-row__stat--count.is-done {
+      color: inherit;
+    }
+
+    /* Tablet: 768px–1023px */
+    @media (min-width: 768px) {
+      .ss-principle-row {
+        --band-h: 3.875rem;
+        --cap-y: 0.875rem;
+        --stage-v-buffer: 1rem;
+        --headline-y: 0.55rem;
+        --headline-inset: clamp(4rem, 11vw, 9rem);
+        gap: 0.625rem;
+      }
+      .ss-principle-row--from-right {
+        --band-tilt: -2deg;
+      }
+      .ss-principle-stream-wrap {
+        --body-w: min(32rem, calc(100% - 2 * var(--grid-pad)));
+      }
+      .ss-principle-row__band {
+        width: min(calc(96vw + 1.25rem), calc(52rem + 1.25rem));
+      }
+      .ss-principle-row--from-left .ss-principle-row__band {
+        left: -1.25rem;
+      }
+      .ss-principle-row--from-right .ss-principle-row__band {
+        right: -1.25rem;
+      }
+      .ss-principle-row--from-left .ss-principle-row__headline {
+        padding-right: 3rem;
+        transform-origin: 36% center;
+      }
+      .ss-principle-row--from-right .ss-principle-row__headline {
+        padding-left: 3rem;
+        transform-origin: 64% center;
+      }
+      .ss-principle-row__headline {
+        flex-wrap: nowrap;
+      }
+      .ss-principle-row__title {
+        font-size: clamp(1.375rem, 1.4vw + 0.85rem, 2rem);
+      }
+      .ss-principle-row--from-right .ss-principle-row__title {
+        text-align: right;
+      }
+      .ss-principle-row__body-wrap {
+        padding-bottom: clamp(0.375rem, 1.25vw, 0.625rem);
+      }
+      .ss-principle-stream {
+        gap: clamp(1.5rem, 3.5vw, 2rem);
+      }
+      .ss-principle-row__stat {
+        font-size: clamp(1.75rem, 2.5vw + 0.65rem, 2.625rem);
+        margin-bottom: 0.5rem;
+      }
+      .ss-principle-row__stat--inline {
+        font-size: clamp(1.375rem, 1.5vw + 0.5rem, 1.875rem);
+      }
+    }
+
+    /* Desktop: 1024px+ */
+    @media (min-width: 1024px) {
+      .ss-principle-row {
+        --band-h: 4.25rem;
+        --cap-y: 1rem;
+        --stage-v-buffer: 1.625rem;
+        --headline-y: 0.65rem;
+        --headline-inset: clamp(6rem, 14vw, 16rem);
+      }
+      .ss-principle-row--from-right {
+        --band-tilt: -2.5deg;
+      }
+      .ss-principle-stream {
+        gap: clamp(1.75rem, 3.25vw, 2.375rem);
+      }
+      .ss-principle-row__band {
+        width: min(calc(88vw + 1.5rem), calc(72rem + 1.5rem));
+      }
+      .ss-principle-row--from-left .ss-principle-row__band {
+        left: -1.5rem;
+      }
+      .ss-principle-row--from-right .ss-principle-row__band {
+        right: -1.5rem;
+      }
+      .ss-principle-row--from-left .ss-principle-row__headline {
+        padding-right: 3.5rem;
+        transform-origin: 40% center;
+      }
+      .ss-principle-row--from-right .ss-principle-row__headline {
+        padding-left: 3.5rem;
+        transform-origin: 60% center;
+      }
+      .ss-principle-row__title {
+        font-size: clamp(1.75rem, 1.05vw + 1rem, 2.625rem);
+        white-space: nowrap;
+      }
+      .ss-principle-stream-wrap {
+        --body-w: 32rem;
+      }
+      .ss-principle-row__stat {
+        font-size: clamp(2rem, 2vw + 0.75rem, 2.75rem);
+        margin-bottom: 0.5625rem;
+      }
+      .ss-principle-row__stat--inline {
+        font-size: clamp(1.5rem, 1.25vw + 0.55rem, 1.875rem);
+      }
+      .ss-principle-row__body-wrap {
+        padding-bottom: clamp(0.5rem, 1.25vw, 0.875rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html.ss-principles-reveal .ss-principle-row:not(.is-visible) .ss-principle-row__pillar,
+      html.ss-principles-reveal .ss-principle-row:not(.is-visible) .ss-principle-row__body-wrap {
+        opacity: 1;
+        transform: none;
+      }
+      .ss-principle-row__pillar {
+        transform: rotate(var(--band-tilt));
+      }
+      .ss-principle-row__headline {
+        transform: translateY(var(--headline-y)) rotate(var(--headline-tilt));
+      }
+      html.ss-principles-reveal .ss-principle-row.is-visible .ss-principle-row__pillar,
+      html.ss-principles-reveal .ss-principle-row.is-visible .ss-principle-row__body-wrap {
+        transition: none;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .ss-principle-row {
+        --reveal-y: 0.5rem;
+        --headline-inset: clamp(1rem, 4.5vw, 1.5rem);
+      }
+      .ss-principle-row--from-left {
+        --reveal-x: -1.25rem;
+      }
+      .ss-principle-row--from-right {
+        --reveal-x: 1.25rem;
+      }
+      html.ss-principles-reveal .ss-principle-row.is-visible .ss-principle-row__pillar {
+        transition:
+          opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+          transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      /* Plassen til hoyre for baandet maa romme HELE endestabelen,
+         ellers klippes kappen av seksjonens overflow-x. Regnes fra de
+         samme variablene som stabelen selv, saa den ikke kan komme i
+         utakt hvis et forhold endres: 0,5rem innrykk paa den ene sida,
+         spalte + trapes + spalte + kappe paa den andre.
+
+         Foer trapeset kom var stabelen 20 px og 2,25rem holdt. Naa er
+         den 29,3 px paa 390, og kappen laa 2 px utenfor skjermen. */
+      .ss-principle-row__band {
+        width: calc(100% - 0.5rem - var(--stabel) - var(--cap-w));
+        max-width: calc(100% - 0.5rem - var(--stabel) - var(--cap-w));
+        box-sizing: border-box;
+      }
+      .ss-principle-row--from-left .ss-principle-row__band {
+        left: 0.5rem;
+        right: auto;
+      }
+      .ss-principle-row--from-right .ss-principle-row__band {
+        right: 0.5rem;
+        left: auto;
+      }
+      .ss-principle-row__headline {
+        gap: 0.375rem 0.625rem;
+      }
+      .ss-principle-row--from-left .ss-principle-row__headline {
+        padding-left: 1rem;
+        padding-right: 2rem;
+      }
+      .ss-principle-row--from-right .ss-principle-row__headline {
+        padding-left: 2rem;
+        padding-right: 1rem;
+      }
+      .ss-principle-row__title {
+        min-width: 0;
+        max-width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        font-size: clamp(1.125rem, 3.2vw + 0.4rem, 1.375rem);
+      }
+      .ss-principle-row--from-right .ss-principle-row__title {
+        text-align: right;
+      }
+    }
+    /* FAQ — custom accordion (forside seksjon 03) */
+    .ss-faq__list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+    .ss-faq-item {
+      position: relative;
+      border: 1px solid #0a0a0a;
+      background: #fff;
+    }
+    .ss-faq-item.is-open {
+      background: #0a0a0a;
+      border-color: #0a0a0a;
+    }
+    .ss-faq-item.is-open::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 2px;
+      background: #ff1e3c;
+      z-index: 1;
+    }
+    .ss-faq-trigger {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      width: 100%;
+      padding: clamp(0.875rem, 2vw, 1.125rem) clamp(1rem, 2.5vw, 1.25rem);
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+    }
+    .ss-faq-trigger:focus-visible {
+      outline: 2px solid #ff1e3c;
+      outline-offset: 2px;
+    }
+    .ss-faq-question {
+      font-size: clamp(1rem, 2.5vw, 1.0625rem);
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      color: #0a0a0a;
+    }
+    .ss-faq-item.is-open .ss-faq-question {
+      color: #fff;
+    }
+    .ss-faq-icon {
+      position: relative;
+      flex-shrink: 0;
+      width: 1rem;
+      height: 1rem;
+      margin-top: 0.15em;
+    }
+    .ss-faq-icon-bar {
+      position: absolute;
+      background: rgba(10, 10, 10, 0.35);
+      transition: opacity 0.25s ease, transform 0.25s ease, background 0.25s ease;
+    }
+    .ss-faq-icon-bar--h {
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      transform: translateY(-50%);
+    }
+    .ss-faq-icon-bar--v {
+      left: 50%;
+      top: 0;
+      width: 1px;
+      height: 100%;
+      transform: translateX(-50%);
+    }
+    .ss-faq-item.is-open .ss-faq-icon-bar {
+      background: #fff;
+    }
+    .ss-faq-item.is-open .ss-faq-icon-bar--v {
+      opacity: 0;
+      transform: translateX(-50%) scaleY(0);
+    }
+    .ss-faq-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.36s cubic-bezier(0.45, 0, 0.22, 1);
+    }
+    .ss-faq-item.is-open .ss-faq-panel {
+      grid-template-rows: 1fr;
+    }
+    .ss-faq-panel-inner {
+      overflow: hidden;
+      min-height: 0;
+    }
+    .ss-faq-panel-inner p {
+      margin: 0;
+      padding: 0 clamp(1rem, 2.5vw, 1.25rem) clamp(0.875rem, 2vw, 1.125rem);
+      font-size: 0.9375rem;
+      line-height: 1.65;
+      color: rgba(10, 10, 10, 0.88);
+      max-width: 52ch;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .ss-faq-item.is-open .ss-faq-panel-inner p {
+      opacity: 1;
+      color: rgba(255, 255, 255, 0.88);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ss-faq-panel,
+      .ss-faq-panel-inner p,
+      .ss-faq-icon-bar {
+        transition: none;
+      }
+    }
+
+
+    /* == EKSPERIMENT: soeyleseksjonen paa svart =======================
+       Forsoek, ikke vedtatt. Angres med  git revert <sha>  - hele
+       endringen ligger i én commit og roerer ingenting annet.
+
+       HVA SOM BLIR LYST OG HVA SOM IKKE GJOER DET
+       Baandet bak hver soeyle er en UGJENNOMSIKTIG lys flate
+       (--band-fill #eeeeee med betongtekstur oppaa), og tittelen og
+       nummeret 01-07 ligger OPPAA det - maalt, ikke antatt. De skal
+       derfor bli staaende moerke. Bare det som ligger paa seksjonens
+       egen bakgrunn snus: overskriften, ingressen, broedteksten og
+       prosenttallet.
+
+       Snudde man alt med en arvet color paa seksjonen, ville tittelen
+       blitt hvit paa et lyst baand - 1,1:1.
+
+       ROEDT STAAR IGJEN SOM ROEDT. #ff1e3c gir 5,50:1 mot svart mot
+       3,82:1 mot hvitt, altsaa BEDRE her enn i dag. Det gjelder baade
+       seksjonsnummeret 03 og telleren mens den ruller.
+
+       Overskriften faar text-paper fordi css/scroll-heading.css har en
+       egen regel for den varianten - ordavsloeringen tonet ellers mot
+       rgba(10,10,10), altsaa sort paa sort. */
+    .ss-principles--dark {
+      background-color: #000000;
+    }
+    /* Ingressen og broedteksten i hver rad. Begge baerer text-ink/90 i
+       markupen; ingenting paa baandet gjoer det. */
+    .ss-principles--dark .text-ink\/90 {
+      color: rgba(255, 255, 255, 0.92);
+    }
+    /* Telleren arver fra broedteksten naar den er ferdig. */
+    .ss-principles--dark .ss-principle-row__stat--count.is-done {
+      color: rgba(255, 255, 255, 0.92);
+    }
+  </style>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "Organization",
+        "LocalBusiness",
+        "ProfessionalService"
+      ],
+      "@id": "https://seventhseal.no/#organization",
+      "name": "Seventh Seal",
+      "url": "https://seventhseal.no/",
+      "logo": "https://seventhseal.no/assets/logo-7S.svg",
+      "image": "https://seventhseal.no/assets/og-image.png",
+      "description": "Norsk designbyrå som leverer webdesign, webutvikling og hosting for bedrifter i Norge.",
+      "email": "team@seventhseal.no",
+      "telephone": "+47 48 38 31 97",
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "Organisasjonsnummer",
+        "value": "937 419 597"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Oslo",
+        "addressCountry": "NO"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Norge"
+      },
+      "knowsLanguage": "nb-NO",
+      "founder": [
+        {
+          "@type": "Person",
+          "name": "Trym"
+        },
+        {
+          "@type": "Person",
+          "name": "Stellan"
+        }
+      ],
+      "priceRange": "7 500–9 000 kr + 500 kr/mnd",
+      "serviceType": [
+        "Webdesign",
+        "Webutvikling",
+        "Nettsideutvikling",
+        "Hosting",
+        "SEO",
+        "UX/UI-design"
+      ],
+      "slogan": "Nettsider for norske bedrifter — fast pris, eget adminpanel og hosting inkludert.",
+      "knowsAbout": [
+        {
+          "@type": "Thing",
+          "name": "Webdesign",
+          "sameAs": "https://no.wikipedia.org/wiki/Webdesign"
+        },
+        {
+          "@type": "Thing",
+          "name": "Nettsted",
+          "sameAs": "https://no.wikipedia.org/wiki/Nettsted"
+        },
+        {
+          "@type": "Thing",
+          "name": "Grafisk design",
+          "sameAs": "https://no.wikipedia.org/wiki/Grafisk_design"
+        },
+        {
+          "@type": "Thing",
+          "name": "Universell utforming",
+          "sameAs": "https://no.wikipedia.org/wiki/Universell_utforming"
+        },
+        {
+          "@type": "Thing",
+          "name": "Webhotell",
+          "sameAs": "https://no.wikipedia.org/wiki/Webhotell"
+        },
+        {
+          "@type": "Thing",
+          "name": "Nettbutikk",
+          "sameAs": "https://no.wikipedia.org/wiki/Nettbutikk"
+        },
+        {
+          "@type": "Thing",
+          "name": "Brukskvalitet",
+          "sameAs": "https://no.wikipedia.org/wiki/Brukskvalitet"
+        },
+        "Søkemotoroptimalisering (SEO)",
+        "Nettsider for småbedrifter"
+      ],
+      "sameAs": [
+        "https://virksomhet.brreg.no/nb/oppslag/enheter/937419597"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://seventhseal.no/#website",
+      "url": "https://seventhseal.no/",
+      "name": "Seventh Seal",
+      "inLanguage": "nb-NO",
+      "publisher": {
+        "@id": "https://seventhseal.no/#organization"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://seventhseal.no/#webpage",
+      "url": "https://seventhseal.no/",
+      "name": "Nettsider for bedrifter | Webdesign i Norge – Seventh Seal",
+      "inLanguage": "nb-NO",
+      "isPartOf": {
+        "@id": "https://seventhseal.no/#website"
+      },
+      "about": {
+        "@id": "https://seventhseal.no/#organization"
+      },
+      "primaryImageOfPage": "https://seventhseal.no/assets/og-image.png",
+      "hasPart": {
+        "@id": "https://seventhseal.no/#faq"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://seventhseal.no/#faq",
+      "isPartOf": {
+        "@id": "https://seventhseal.no/#webpage"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Hva koster en nettside?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hos Seventh Seal koster en nettside fra 7 500 kr i engangsbeløp (7 500–9 000 kr avhengig av omfang), pluss 500 kr/mnd for hosting, vedlikehold og støtte. Ekstra undersider koster 500 kr per side. Kontaktskjema er inkludert i grunnpakken. Tillegg — som bookingintegrasjon (1 500 kr), flerspråklig nettside (1 500 kr) eller nyhetsseksjon (1 000 kr) — prises separat. Prisene er de dere betaler — ingen mva kommer i tillegg."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor lang tid tar det å lage en nettside?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "De fleste prosjekter ferdigstilles innen 2–4 uker. Tidsrammen avhenger av omfang, hvor mye innhold som skal på plass, og hvor raskt vi får tilbakemeldinger underveis."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hva er inkludert i drift og hosting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Månedsabonnementet på 500 kr/mnd dekker hosting, oppetidsovervåkning og e-poststøtte med svar normalt innen 24 timer, ofte raskere."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor mange revisjoner er inkludert?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Grunnpakken inkluderer 3 revisjonsrunder. Ytterligere revisjoner gjøres ved nærmere avtale, og nye seksjoner eller funksjoner avtales som tillegg."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Kan vi overta nettsiden selv?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nettsiden driftes normalt videre hos oss gjennom månedsabonnementet. Ved oppsigelse (30 dagers skriftlig varsel) kan dere kjøpe rettighetene til kode og design for avtalt pris — det gir bruksrettigheter, ikke videresalgsrettigheter."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hva betyr gratis førsteutkast?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Et gratis førsteutkast betyr at vi lager en konkret retning for nettsiden før dere bestemmer dere for videre samarbeid. Det gir dere et bedre grunnlag for å vurdere design, struktur, omfang og pris."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hva betyr SEO for en nettside?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SEO handler om å gjøre nettsiden lettere å forstå for både Google og brukerne. Det innebærer blant annet tydelige titler, gode tekststrukturer, relevante søkeord, raske lastetider, mobilvennlighet og teknisk ryddighet. Målet er at nettsiden skal ha bedre forutsetninger for å bli funnet av riktige kunder."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Kan dere hjelpe oss å bli synlige på Google?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja. Vi bygger nettsider med et teknisk og innholdsmessig SEO-grunnlag fra start. Det betyr at vi setter opp god sidestruktur, metadata, overskrifter, internlenker, sitemap og innhold som retter seg mot relevante søk. SEO er likevel en langsiktig prosess, og synlighet avhenger også av konkurranse, innhold og videre arbeid over tid."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Kan dere forbedre en eksisterende nettside?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja. Hvis dere allerede har en nettside, kan vi vurdere hva som bør forbedres først. Det kan handle om design, struktur, tekst, SEO, hastighet eller kontaktflyt. Dere kan også starte med en gratis nettsidesjekk, der vi gir 3–5 konkrete forbedringspunkter."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hva er gratis nettsidesjekk?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Gratis nettsidesjekk er en kort manuell vurdering av dagens nettside. Vi ser på førsteinntrykk, innhold, struktur, SEO-grunnlag, mobilopplevelse og kontaktflyt. Etterpå får dere noen konkrete punkter på e-post om hva som kan forbedres."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Kan vi endre teksten på nettsiden selv?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja. Alle nettsider vi lager kommer med et adminpanel der dere retter tekst og bytter bilder rett på siden, uten å kunne kode. Panelet er inkludert i leveransen, og drift av det ligger i månedsprisen. Vi lærer dere å bruke det i en gjennomgang på 30 minutter, og dere kan prøve panelet selv før dere bestemmer dere."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body class="min-h-screen flex flex-col">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-g4 focus:top-g4 focus:z-[100] focus:px-g3 focus:py-g2 focus:bg-accent focus:text-paper focus:text-label focus:uppercase" data-copy="shared.skipToContent">Hopp til innhold</a>
+
+  <header class="border-b border-ink bg-paper sticky top-0 z-50">
+    <div class="max-w-grid mx-auto px-g4 md:px-g6 py-g4 flex items-center justify-between gap-g4">
+      <a href="/" class="block shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2" data-copy-aria-label="shared.logoHomeAria">
+        <img src="assets/logo-7s-invert.svg" alt="" class="site-logo site-logo--invert" width="226" height="82" aria-hidden="true" />
+        <img src="assets/logo-7S.svg" alt="Seventh Seal" class="site-logo site-logo--dark" width="226" height="82" data-copy-alt="shared.logoAlt" />
+      </a>
+
+      <nav class="hidden md:flex items-center gap-g8 text-label uppercase tracking-[0.14em]" data-copy-aria-label="shared.navPrimaryAria">
+        <a href="/" class="text-accent border-b-2 border-accent pb-g1" aria-current="page" data-copy="shared.nav.home">Hjem</a>
+        <a href="services.html" class="hover:text-accent transition-colors focus:outline-none focus-visible:text-accent" data-copy="shared.nav.services">Tjenester og priser</a>
+        <a href="work.html" class="hover:text-accent transition-colors focus:outline-none focus-visible:text-accent" data-copy="shared.nav.work">Arbeid</a>
+        <a href="about.html#about-section" class="hover:text-accent transition-colors focus:outline-none focus-visible:text-accent" data-copy="shared.nav.about">Om oss</a>
+        <a href="contact.html" class="hover:text-accent transition-colors focus:outline-none focus-visible:text-accent" data-copy="shared.nav.contact">Kontakt</a>
+      </nav>
+
+      <details class="md:hidden relative group">
+        <summary class="cursor-pointer select-none text-label uppercase tracking-[0.14em] px-g2 py-g1 border border-ink hover:bg-mist transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent" data-copy="shared.menu">Meny</summary>
+        <div class="absolute right-0 top-full mt-g2 w-[min(100vw-32px,280px)] border border-ink bg-paper z-50">
+          <nav class="flex flex-col text-label uppercase tracking-[0.14em]" data-copy-aria-label="shared.navPrimaryMobileAria">
+            <a href="/" class="px-g4 py-g3 border-b border-ink bg-mist text-accent" aria-current="page" data-copy="shared.nav.home">Hjem</a>
+            <a href="services.html" class="px-g4 py-g3 border-b border-ink hover:bg-mist transition-colors" data-copy="shared.nav.services">Tjenester og priser</a>
+            <a href="work.html" class="px-g4 py-g3 border-b border-ink hover:bg-mist transition-colors" data-copy="shared.nav.work">Arbeid</a>
+            <a href="about.html#about-section" class="px-g4 py-g3 border-b border-ink hover:bg-mist transition-colors" data-copy="shared.nav.about">Om oss</a>
+            <a href="contact.html" class="px-g4 py-g3 hover:bg-mist transition-colors" data-copy="shared.nav.contact">Kontakt</a>
+          </nav>
+        </div>
+      </details>
+    </div>
+  </header>
+
+<main id="main" class="flex-1">
+    <!-- Ingen aria-label. Et <section> uten tilgjengelig navn er ikke en
+         landemerke-region i ARIA, og det er riktig her: seksjonen har
+         ingen overskrift lenger, videoen er aria-hidden, og innholdet er
+         to lenker som allerede staar i tab-rekkefolgen. "Hero" ville
+         vaert sjargong lest opp uten aa hjelpe noen. -->
+    <section class="hero" data-header-ink="light" data-header-fill="transparent">
+      <canvas class="hero__media hero-live" width="1898" height="876" aria-hidden="true"></canvas>
+      <div class="hero__content">
+        <div class="max-w-grid mx-auto px-g4 md:px-g6">
+          <div class="index-hero-text relative">
+            <h1 id="hero-heading" class="text-display leading-[1.12]" data-copy-html="pages.index.hero.h1">Designer morgendagens <span>nettsider</span>, i&nbsp;dag</h1>
+            <div class="index-hero-actions">
+              <a href="contact.html" class="index-hero-btn index-hero-btn--solid" data-copy="shared.cta.startProject">Få gratis utkast</a>
+              <a href="work.html" class="index-hero-btn index-hero-btn--outline" data-copy="pages.index.om.cta">Se arbeidet vårt</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ss-om ss-paint relative isolate overflow-x-clip border-b border-ink text-ink" aria-labelledby="sec-om"
+             data-header-ink="light" data-header-ink-if="om-moerk" data-header-fill="#000000">
+      <span class="ss-om__line ss-om__line--top ss-paint__line" aria-hidden="true"></span>
+      <div class="ss-om__inner ss-paint__content max-w-grid mx-auto px-g4 md:px-g6 py-g8 md:py-g10 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-g8 items-center">
+          <div class="lg:col-span-8 text-center lg:text-left">
+            <p class="text-label uppercase text-accent mb-g3" data-copy="pages.index.om.sectionNum">02</p>
+            <h2 id="sec-om" class="text-headline text-ink" data-copy="pages.index.om.h2">Byråkvalitet, uten byråpris.</h2>
+            <p class="text-body text-ink/85 mt-g4 max-w-xl mx-auto lg:mx-0" data-copy="pages.index.om.body1">Seventh Seal bygger moderne nettsider for små og mellomstore bedrifter. Vi sørger for at designet, innholdet og det tekniske henger sammen slik at nettsiden både ser bra ut og skaper resultater.</p>
+            <p class="text-body text-ink/85 mt-g3 max-w-xl mx-auto lg:mx-0" data-copy="pages.index.om.body2" data-om-terskel>Gjennom en effektiv arbeidsmodell leverer vi høy kvalitet til en brøkdel av prisen hos tradisjonelle byråer.</p>
+            <p class="text-body text-ink/85 mt-g3 max-w-xl mx-auto lg:mx-0" data-copy-html="pages.index.om.panel">Hver nettside leveres med et adminpanel dere styrer innholdet fra selv. <a href="oppdatere-nettsiden-selv.html" class="ss-inline-link">Se hvordan det fungerer</a>.</p>
+          </div>
+          <div class="lg:col-span-4 flex justify-center lg:justify-end">
+            <a href="work.html" class="inline-flex items-center justify-center min-h-g10 px-g5 border border-ink text-label uppercase tracking-[0.12em] hover:bg-accent hover:border-accent hover:text-paper transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2" data-copy="pages.index.om.cta">Se arbeidet vårt</a>
+          </div>
+        </div>
+      </div>
+      <span class="ss-om__line ss-om__line--bottom ss-paint__line" aria-hidden="true"></span>
+    </section>
+
+    <section class="relative isolate overflow-x-clip ss-principles--dark" aria-labelledby="sec-principles" data-header-ink="light">
+      <div class="max-w-grid mx-auto px-g4 md:px-g6 pt-g12 md:pt-g16 pb-g10 md:pb-g12 relative z-10">
+        <div class="border-b border-ink pb-g6">
+          <p class="text-label uppercase text-accent mb-g2" data-copy="pages.index.principles.sectionNum">03</p>
+          <h2 id="sec-principles" class="text-headline text-paper max-w-[22ch] ss-scroll-heading" data-scroll-heading data-copy="pages.index.principles.h2" data-scroll-split-at="for webdesign" data-scroll-accent="7 søyler">
+            <span class="ss-scroll-heading__line">Seventh Seals 7 søyler</span>
+            <span class="ss-scroll-heading__line">for webdesign</span>
+          </h2>
+          <p class="text-body text-ink/90 mt-g4 max-w-2xl" data-copy-html="pages.index.principles.intro">Et godt nettsted er et resultat av et tydelig rammeverk, ikke tilfeldige designbeslutninger. Våre 7 søyler gir oss et tydelig utgangspunkt for hvordan nettsiden skal fungere i praksis, ikke bare hvordan den ser ut.</p>
+        </div>
+      </div>
+      <div class="ss-principle-stream-wrap pb-g12 md:pb-g16">
+        <ol class="ss-principle-stream" role="list">
+          <li class="ss-principle-row ss-principle-row--from-left">
+            <div class="ss-principle-row__stage">
+              <div class="ss-principle-row__pillar">
+                <div class="ss-principle-row__band" aria-hidden="true"></div>
+                <div class="ss-principle-row__headline">
+                <span class="ss-principle-row__num text-accent">01</span>
+                <h3 class="ss-principle-row__title" data-copy="pages.index.principles.p1Title">Profesjonelt design</h3>
+              </div>
+              </div>
+            </div>
+            <div class="ss-principle-row__body-wrap">
+              <p class="ss-principle-row__body text-ink/90" data-copy-html="pages.index.principles.p1Body"><span class="ss-principle-row__stat ss-principle-row__stat--count" data-count-to="94" aria-label="94 prosent"><span class="ss-principle-row__stat-count__num">94</span> %</span> av brukere danner seg et førsteinntrykk av et nettsted basert på designet. Et godt design bygger troverdighet med én gang.</p>
+            </div>
+          </li>
+          <li class="ss-principle-row ss-principle-row--from-right">
+            <div class="ss-principle-row__stage">
+              <div class="ss-principle-row__pillar">
+                <div class="ss-principle-row__band" aria-hidden="true"></div>
+                <div class="ss-principle-row__headline">
+                <span class="ss-principle-row__num text-accent">02</span>
+                <h3 class="ss-principle-row__title" data-copy="pages.index.principles.p2Title">Struktur og navigasjon</h3>
+              </div>
+              </div>
+            </div>
+            <div class="ss-principle-row__body-wrap">
+              <p class="ss-principle-row__body text-ink/90" data-copy-html="pages.index.principles.p2Body">Brukere forlater raskt sider som er vanskelig å forstå. Vi er nøye med informasjonsarkitektur og innholdsstruktur, slik at brukerne finner det de trenger uten friksjon.</p>
+            </div>
+          </li>
+          <li class="ss-principle-row ss-principle-row--from-left">
+            <div class="ss-principle-row__stage">
+              <div class="ss-principle-row__pillar">
+                <div class="ss-principle-row__band" aria-hidden="true"></div>
+                <div class="ss-principle-row__headline">
+                <span class="ss-principle-row__num text-accent">03</span>
+                <h3 class="ss-principle-row__title" data-copy="pages.index.principles.p3Title">Tydelig kommunikasjon</h3>
+              </div>
+              </div>
+            </div>
+            <div class="ss-principle-row__body-wrap">
+              <p class="ss-principle-row__body text-ink/90" data-copy-html="pages.index.principles.p3Body"><span class="ss-principle-row__stat ss-principle-row__stat--count" data-count-to="38" aria-label="38 prosent"><span class="ss-principle-row__stat-count__num">38</span> %</span> av brukere slutter å engasjere seg hvis innholdet er uklart. Klare budskap gjør det enklere å forstå og ta beslutninger.</p>
+            </div>
+          </li>
+          <li class="ss-principle-row ss-principle-row--from-right">
+            <div class="ss-principle-row__stage">
+              <div class="ss-principle-row__pillar">
+                <div class="ss-principle-row__band" aria-hidden="true"></div>
+                <div class="ss-principle-row__headline">
+                <span class="ss-principle-row__num text-accent">04</span>
+                <h3 class="ss-principle-row__title" data-copy="pages.index.principles.p4Title">Ytelse og hastighet</h3>
+              </div>
+              </div>
+            </div>
+            <div class="ss-principle-row__body-wrap">
+              <p class="ss-principle-row__body text-ink/90" data-copy-html="pages.index.principles.p4Body"><span class="ss-principle-row__stat ss-principle-row__stat--count" data-count-to="53" aria-label="53 prosent"><span class="ss-principle-row__stat-count__num">53</span> %</span> av brukere forlater en side som tar mer enn 3 sekunder å laste. Vi analyserer og optimaliserer nettsiden for rask lastetid.</p>
+            </div>
+          </li>
+          <li class="ss-principle-row ss-principle-row--from-left">
+            <div class="ss-principle-row__stage">
+              <div class="ss-principle-row__pillar">
+                <div class="ss-principle-row__band" aria-hidden="true"></div>
+                <div class="ss-principle-row__headline">
+                <span class="ss-principle-row__num text-accent">05</span>
+                <h3 class="ss-principle-row__title" data-copy="pages.index.principles.p5Title">Tilgjengelighet og kvalitet</h3>
+              </div>
+              </div>
+            </div>
+            <div class="ss-principle-row__body-wrap">
+              <p class="ss-principle-row__body text-ink/90" data-copy-html="pages.index.principles.p5Body"><span class="ss-principle-row__stat ss-principle-row__stat--count" data-count-to="15" aria-label="15 prosent"><span class="ss-principle-row__stat-count__num">15</span> %</span> av verdens befolkning lever med en funksjonsnedsettelse. Vi følger EAA sine nye krav om universell utforming og gir dermed bedre brukeropplevelse for alle.</p>
+            </div>
+          </li>
+          <li class="ss-principle-row ss-principle-row--from-right">
+            <div class="ss-principle-row__stage">
+              <div class="ss-principle-row__pillar">
+                <div class="ss-principle-row__band" aria-hidden="true"></div>
+                <div class="ss-principle-row__headline">
+                <span class="ss-principle-row__num text-accent">06</span>
+                <h3 class="ss-principle-row__title" data-copy="pages.index.principles.p6Title">Konvertering i fokus</h3>
+              </div>
+              </div>
+            </div>
+            <div class="ss-principle-row__body-wrap">
+              <p class="ss-principle-row__body text-ink/90" data-copy-html="pages.index.principles.p6Body">Designet skal støtte handling. Gjennom strategisk UI-design legger vi til rette for at besøkende tar det neste steget, enten det gjelder kjøp eller å ta kontakt.</p>
+            </div>
+          </li>
+          <li class="ss-principle-row ss-principle-row--from-left">
+            <div class="ss-principle-row__stage">
+              <div class="ss-principle-row__pillar">
+                <div class="ss-principle-row__band" aria-hidden="true"></div>
+                <div class="ss-principle-row__headline">
+                <span class="ss-principle-row__num text-accent">07</span>
+                <h3 class="ss-principle-row__title" data-copy="pages.index.principles.p7Title">Bygget for videre vekst</h3>
+              </div>
+              </div>
+            </div>
+            <div class="ss-principle-row__body-wrap">
+              <p class="ss-principle-row__body text-ink/90" data-copy-html="pages.index.principles.p7Body">Bedrifter som investerer i skalerbare løsninger sparer tid og kostnader over tid. Vi bygger fleksible løsninger som tåler nye tjenester, markeder eller innhold, uten å bryte strukturen.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ss-nettsidesjekk-band ss-paint relative isolate overflow-x-clip bg-mist text-ink" aria-labelledby="nettsidesjekk-cta-index">
+      <div class="ss-nettsidesjekk-band__panel bg-paper">
+        <!-- Begge strekene ligger INNE i panelet. Fra 768 og opp er
+             panelet rotert, og bare et barn av det foelger skraaningen.
+             Under 768 fyller panelet seksjonen, saa de staar der de
+             alltid har staatt. -->
+        <span class="ss-nettsidesjekk-band__line ss-paint__line ss-nettsidesjekk-band__line--top" aria-hidden="true"></span>
+        <div class="ss-nettsidesjekk-band__inner max-w-grid mx-auto px-g4 md:px-g6 py-g8 md:py-g10 relative z-10">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-g6 items-center">
+            <div class="lg:col-span-8 text-center lg:text-left">
+              <!-- Ingen data-scroll-heading her. Overskriften skal staa
+                   ferdig fra foerste maling, ikke bygges opp ord for ord.
+                   Attributtet var det eneste som registrerte den i
+                   assets/scroll-heading-anim.js, saa uten det splittes
+                   den ikke i ord-spenn og faar ingen avsloering.
+
+                   data-scroll-accent="allerede" er borte av samme grunn:
+                   kursiven kom fra .ss-heading-script, som SAMME skript
+                   satte paa det matchende ordet under splittingen. Ordet
+                   arver naa setningens egen skrift, vekt og stil.
+
+                   De 47 andre overskriftene med data-scroll-heading er
+                   uroerte, og de tre andre stedene med
+                   data-scroll-accent likesaa. -->
+              <h2 id="nettsidesjekk-cta-index" class="text-headline text-ink">Har dere allerede en nettside?</h2>
+              <p class="text-body text-ink/85 mt-g3 max-w-xl mx-auto lg:mx-0">Få en gratis nettsidesjekk med konkrete forbedringspunkter for design, struktur, SEO og kontaktflyt.</p>
+            </div>
+            <div class="lg:col-span-4 flex justify-center lg:justify-end">
+              <a href="gratis-nettsidesjekk.html" class="inline-flex items-center justify-center min-h-g10 px-g5 border border-ink text-label uppercase tracking-[0.12em] hover:bg-accent hover:border-accent hover:text-paper transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">Sjekk nettsiden gratis</a>
+            </div>
+          </div>
+        </div>
+        <span class="ss-nettsidesjekk-band__line ss-paint__line ss-nettsidesjekk-band__line--bottom" aria-hidden="true"></span>
+      </div>
+    </section>
+
+    <section class="relative isolate overflow-x-clip border-b border-ink" aria-labelledby="sec-capabilities" id="faq">
+      <div class="max-w-grid mx-auto px-g4 md:px-g6 py-g12 md:py-g16 relative z-10">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-g6 mb-g10 border-b border-ink pb-g6">
+          <div>
+            <p class="text-label uppercase text-accent mb-g2" data-copy="pages.index.capabilities.sectionNum">04</p>
+            <h2 id="sec-capabilities" class="text-headline ss-scroll-heading" data-scroll-heading data-copy="pages.index.capabilities.h2" data-scroll-accent="spørsmål">
+              <span class="ss-scroll-heading__line">Ofte stilte spørsmål</span>
+            </h2>
+          </div>
+          <a href="services.html#priser" class="text-label uppercase tracking-[0.12em] text-ink hover:text-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent shrink-0" data-copy="shared.cta.allServices">Se priser og tillegg →</a>
+        </div>
+        <div class="ss-faq__list">
+          <div class="ss-faq-item">
+            <button class="ss-faq-trigger" id="ss-faq-trigger-1" type="button" aria-expanded="false" aria-controls="ss-faq-panel-1">
+              <span class="ss-faq-question">Hva koster en nettside?</span>
+              <span class="ss-faq-icon" aria-hidden="true">
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--h"></span>
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--v"></span>
+              </span>
+            </button>
+            <div class="ss-faq-panel" id="ss-faq-panel-1" role="region" aria-labelledby="ss-faq-trigger-1" aria-hidden="true">
+              <div class="ss-faq-panel-inner">
+                <p>Hos Seventh Seal koster en nettside fra 7 500 kr i engangsbeløp (7 500–9 000 kr avhengig av omfang), pluss 500 kr/mnd for hosting, vedlikehold og støtte. Ekstra undersider koster 500 kr per side. Kontaktskjema er inkludert i grunnpakken. Tillegg — som bookingintegrasjon (1 500 kr), flerspråklig nettside (1 500 kr) eller nyhetsseksjon (1 000 kr) — prises separat. Prisene er de dere betaler — ingen mva kommer i tillegg.</p>
+              </div>
+            </div>
+          </div>
+          <div class="ss-faq-item">
+            <button class="ss-faq-trigger" id="ss-faq-trigger-2" type="button" aria-expanded="false" aria-controls="ss-faq-panel-2">
+              <span class="ss-faq-question">Hvor lang tid tar det å lage en nettside?</span>
+              <span class="ss-faq-icon" aria-hidden="true">
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--h"></span>
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--v"></span>
+              </span>
+            </button>
+            <div class="ss-faq-panel" id="ss-faq-panel-2" role="region" aria-labelledby="ss-faq-trigger-2" aria-hidden="true">
+              <div class="ss-faq-panel-inner">
+                <p>De fleste prosjekter ferdigstilles innen 2–4 uker. Tidsrammen avhenger av omfang, hvor mye innhold som skal på plass, og hvor raskt vi får tilbakemeldinger underveis.</p>
+              </div>
+            </div>
+          </div>
+          <div class="ss-faq-item">
+            <button class="ss-faq-trigger" id="ss-faq-trigger-3" type="button" aria-expanded="false" aria-controls="ss-faq-panel-3">
+              <span class="ss-faq-question">Hva er inkludert i drift og hosting?</span>
+              <span class="ss-faq-icon" aria-hidden="true">
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--h"></span>
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--v"></span>
+              </span>
+            </button>
+            <div class="ss-faq-panel" id="ss-faq-panel-3" role="region" aria-labelledby="ss-faq-trigger-3" aria-hidden="true">
+              <div class="ss-faq-panel-inner">
+                <p>Månedsabonnementet på 500 kr/mnd dekker hosting, oppetidsovervåkning og e-poststøtte med svar normalt innen 24 timer, ofte raskere.</p>
+              </div>
+            </div>
+          </div>
+          <div class="ss-faq-item">
+            <button class="ss-faq-trigger" id="ss-faq-trigger-4" type="button" aria-expanded="false" aria-controls="ss-faq-panel-4">
+              <span class="ss-faq-question">Hvor mange revisjoner er inkludert?</span>
+              <span class="ss-faq-icon" aria-hidden="true">
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--h"></span>
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--v"></span>
+              </span>
+            </button>
+            <div class="ss-faq-panel" id="ss-faq-panel-4" role="region" aria-labelledby="ss-faq-trigger-4" aria-hidden="true">
+              <div class="ss-faq-panel-inner">
+                <p>Grunnpakken inkluderer 3 revisjonsrunder. Ytterligere revisjoner gjøres ved nærmere avtale, og nye seksjoner eller funksjoner avtales som tillegg.</p>
+              </div>
+            </div>
+          </div>
+          <div class="ss-faq-item">
+            <button class="ss-faq-trigger" id="ss-faq-trigger-5" type="button" aria-expanded="false" aria-controls="ss-faq-panel-5">
+              <span class="ss-faq-question">Kan vi overta nettsiden selv?</span>
+              <span class="ss-faq-icon" aria-hidden="true">
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--h"></span>
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--v"></span>
+              </span>
+            </button>
+            <div class="ss-faq-panel" id="ss-faq-panel-5" role="region" aria-labelledby="ss-faq-trigger-5" aria-hidden="true">
+              <div class="ss-faq-panel-inner">
+                <p>Nettsiden driftes normalt videre hos oss gjennom månedsabonnementet. Ved oppsigelse (30 dagers skriftlig varsel) kan dere kjøpe rettighetene til kode og design for avtalt pris — det gir bruksrettigheter, ikke videresalgsrettigheter.</p>
+              </div>
+            </div>
+          </div>
+          <div class="ss-faq-item">
+            <button class="ss-faq-trigger" id="ss-faq-trigger-6" type="button" aria-expanded="false" aria-controls="ss-faq-panel-6">
+              <span class="ss-faq-question">Hva betyr gratis førsteutkast?</span>
+              <span class="ss-faq-icon" aria-hidden="true">
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--h"></span>
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--v"></span>
+              </span>
+            </button>
+            <div class="ss-faq-panel" id="ss-faq-panel-6" role="region" aria-labelledby="ss-faq-trigger-6" aria-hidden="true">
+              <div class="ss-faq-panel-inner">
+                <p>Et gratis førsteutkast betyr at vi lager en konkret retning for nettsiden før dere bestemmer dere for videre samarbeid. Det gir dere et bedre grunnlag for å vurdere design, struktur, omfang og pris.</p>
+              </div>
+            </div>
+          </div>
+          <div class="ss-faq-item">
+            <button class="ss-faq-trigger" id="ss-faq-trigger-7" type="button" aria-expanded="false" aria-controls="ss-faq-panel-7">
+              <span class="ss-faq-question">Hva betyr SEO for en nettside?</span>
+              <span class="ss-faq-icon" aria-hidden="true">
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--h"></span>
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--v"></span>
+              </span>
+            </button>
+            <div class="ss-faq-panel" id="ss-faq-panel-7" role="region" aria-labelledby="ss-faq-trigger-7" aria-hidden="true">
+              <div class="ss-faq-panel-inner">
+                <p>SEO handler om å gjøre nettsiden lettere å forstå for både Google og brukerne. Det innebærer blant annet tydelige titler, gode tekststrukturer, relevante søkeord, raske lastetider, mobilvennlighet og teknisk ryddighet. Målet er at nettsiden skal ha bedre forutsetninger for å bli funnet av riktige kunder.</p>
+              </div>
+            </div>
+          </div>
+          <div class="ss-faq-item">
+            <button class="ss-faq-trigger" id="ss-faq-trigger-8" type="button" aria-expanded="false" aria-controls="ss-faq-panel-8">
+              <span class="ss-faq-question">Kan dere hjelpe oss å bli synlige på Google?</span>
+              <span class="ss-faq-icon" aria-hidden="true">
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--h"></span>
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--v"></span>
+              </span>
+            </button>
+            <div class="ss-faq-panel" id="ss-faq-panel-8" role="region" aria-labelledby="ss-faq-trigger-8" aria-hidden="true">
+              <div class="ss-faq-panel-inner">
+                <p>Ja. Vi bygger nettsider med et teknisk og innholdsmessig SEO-grunnlag fra start. Det betyr at vi setter opp god sidestruktur, metadata, overskrifter, internlenker, sitemap og innhold som retter seg mot relevante søk. SEO er likevel en langsiktig prosess, og synlighet avhenger også av konkurranse, innhold og videre arbeid over tid.</p>
+              </div>
+            </div>
+          </div>
+          <div class="ss-faq-item">
+            <button class="ss-faq-trigger" id="ss-faq-trigger-9" type="button" aria-expanded="false" aria-controls="ss-faq-panel-9">
+              <span class="ss-faq-question">Kan dere forbedre en eksisterende nettside?</span>
+              <span class="ss-faq-icon" aria-hidden="true">
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--h"></span>
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--v"></span>
+              </span>
+            </button>
+            <div class="ss-faq-panel" id="ss-faq-panel-9" role="region" aria-labelledby="ss-faq-trigger-9" aria-hidden="true">
+              <div class="ss-faq-panel-inner">
+                <p>Ja. Hvis dere allerede har en nettside, kan vi vurdere hva som bør forbedres først. Det kan handle om design, struktur, tekst, SEO, hastighet eller kontaktflyt. Dere kan også starte med en gratis nettsidesjekk, der vi gir 3–5 konkrete forbedringspunkter.</p>
+              </div>
+            </div>
+          </div>
+          <div class="ss-faq-item">
+            <button class="ss-faq-trigger" id="ss-faq-trigger-10" type="button" aria-expanded="false" aria-controls="ss-faq-panel-10">
+              <span class="ss-faq-question">Hva er gratis nettsidesjekk?</span>
+              <span class="ss-faq-icon" aria-hidden="true">
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--h"></span>
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--v"></span>
+              </span>
+            </button>
+            <div class="ss-faq-panel" id="ss-faq-panel-10" role="region" aria-labelledby="ss-faq-trigger-10" aria-hidden="true">
+              <div class="ss-faq-panel-inner">
+                <p>Gratis nettsidesjekk er en kort manuell vurdering av dagens nettside. Vi ser på førsteinntrykk, innhold, struktur, SEO-grunnlag, mobilopplevelse og kontaktflyt. Etterpå får dere noen konkrete punkter på e-post om hva som kan forbedres.</p>
+              </div>
+            </div>
+          </div>
+          <div class="ss-faq-item">
+            <button class="ss-faq-trigger" id="ss-faq-trigger-11" type="button" aria-expanded="false" aria-controls="ss-faq-panel-11">
+              <span class="ss-faq-question">Kan vi endre teksten på nettsiden selv?</span>
+              <span class="ss-faq-icon" aria-hidden="true">
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--h"></span>
+                <span class="ss-faq-icon-bar ss-faq-icon-bar--v"></span>
+              </span>
+            </button>
+            <div class="ss-faq-panel" id="ss-faq-panel-11" role="region" aria-labelledby="ss-faq-trigger-11" aria-hidden="true">
+              <div class="ss-faq-panel-inner">
+                <p>Ja. Alle nettsider vi lager kommer med et adminpanel der dere retter tekst og bytter bilder rett på siden, uten å kunne kode. Panelet er inkludert i leveransen, og drift av det ligger i månedsprisen. Vi lærer dere å bruke det i en gjennomgang på 30 minutter, og dere kan prøve panelet selv før dere bestemmer dere.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ss-cta-band ss-paint ss-paint__fill relative isolate overflow-x-clip bg-ink text-paper" aria-labelledby="sec-cta">
+      <div class="ss-cta-band__inner ss-paint__content max-w-grid mx-auto px-g4 md:px-g6 py-g12 md:py-g16 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-g8 items-center">
+          <div class="lg:col-span-8 text-center lg:text-left">
+            <p class="text-label uppercase text-accent mb-g3" data-copy="pages.index.ctaBand.sectionNum">05</p>
+            <h2 id="sec-cta" class="text-headline text-paper" data-copy="pages.index.ctaBand.h2">Klar for en prat?</h2>
+            <p class="text-body text-paper/85 mt-g4 max-w-xl mx-auto lg:mx-0" data-copy-html="pages.index.ctaBand.body">Fortell oss kort hva dere ønsker å få til, så gir vi dere et konkret forslag til neste steg.</p>
+          </div>
+          <div class="lg:col-span-4 flex justify-center lg:justify-end">
+            <a href="contact.html" class="inline-flex items-center justify-center min-h-g10 px-g5 border border-paper text-label uppercase tracking-[0.12em] hover:bg-accent hover:border-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-ink" data-copy="shared.cta.requestQuote">Ta kontakt</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="ss-footer border-t border-ink bg-mist mt-auto" role="contentinfo">
+    <div class="max-w-grid mx-auto px-g4 md:px-g6">
+      <div class="ss-footer__main">
+        <div class="ss-footer__brand">
+          <a href="/" class="ss-footer__logo focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2" data-copy-aria-label="shared.logoHomeAria">
+            <img src="assets/icon-mark.svg" alt="" class="ss-footer__logo-img" width="70" height="70" loading="lazy" decoding="async" data-copy-alt="shared.logoAlt" />
+          </a>
+          <p class="ss-footer__blurb" data-copy="shared.footer.blurb">Seventh Seal bygger moderne nettsider for små og mellomstore bedrifter — med tydelig design, teknisk kvalitet og enkel drift.</p>
+          <p class="ss-footer__meta" data-copy="shared.footer.copyright">© 2026 Seventh Seal</p>
+          <p class="ss-footer__meta" data-copy="shared.footer.orgNr">Org.nr. 937 419 597</p>
+        </div>
+        <nav class="ss-footer__col" aria-label="Kontakt">
+          <p id="footer-contact-heading" class="ss-footer__heading" data-copy="shared.footer.contactTitle">Kontakt</p>
+          <ul class="ss-footer__list">
+            <li><a href="mailto:team@seventhseal.no" class="ss-footer__link" data-copy-href="shared.footer.emailHref" data-copy="shared.footer.emailAddress">team@seventhseal.no</a></li>
+            <li><a href="tel:+4748383197" class="ss-footer__link" data-copy-href="shared.footer.phoneHref" data-copy="shared.footer.phoneDisplay">48 38 31 97</a></li>
+            <li><span class="ss-footer__text" data-copy="shared.footer.area">Oslo / Norge</span></li>
+          </ul>
+        </nav>
+        <nav class="ss-footer__col" aria-label="Tjenester">
+          <p id="footer-services-heading" class="ss-footer__heading" data-copy="shared.footer.servicesTitle">Tjenester</p>
+          <ul class="ss-footer__list">
+            <li><a href="nettsider-for-bedrifter.html" class="ss-footer__link" data-copy="shared.footer.linkBusinessSites">Nettsider for bedrifter</a></li>
+            <li><a href="hva-koster-en-nettside.html" class="ss-footer__link" data-copy="shared.footer.linkPriceGuide">Hva koster en nettside?</a></li>
+            <li><a href="lage-nettside-for-bedrift.html" class="ss-footer__link" data-copy="shared.footer.linkBusinessGuide">Lage nettside for bedrift</a></li>
+            <li><a href="oppdatere-nettsiden-selv.html" class="ss-footer__link" data-copy="shared.footer.linkSelfEdit">Oppdatere nettsiden selv</a></li>
+            <li><a href="services.html" class="ss-footer__link" data-copy="shared.footer.linkWebdesign">Webdesign</a></li>
+            <li><a href="drifte-nettsider.html" class="ss-footer__link" data-copy="shared.footer.linkHosting">Drift og hosting</a></li>
+            <li><a href="webutvikler-oslo.html" class="ss-footer__link" data-copy="shared.footer.linkOslo">Webutvikler i Oslo</a></li>
+            <li><a href="services.html#priser" class="ss-footer__link" data-copy="shared.footer.linkPricing">Priser og tillegg</a></li>
+            <li><a href="gratis-nettsidesjekk.html" class="ss-footer__link" data-copy="shared.footer.linkWebsiteCheck">Gratis nettsidesjekk</a></li>
+          </ul>
+        </nav>
+        <nav class="ss-footer__col" aria-label="Sider">
+          <p id="footer-pages-heading" class="ss-footer__heading" data-copy="shared.footer.pagesTitle">Sider</p>
+          <ul class="ss-footer__list">
+            <li><a href="/" class="ss-footer__link" data-copy="shared.nav.home">Hjem</a></li>
+            <li><a href="services.html" class="ss-footer__link" data-copy="shared.nav.services">Tjenester og priser</a></li>
+            <li><a href="work.html" class="ss-footer__link" data-copy="shared.nav.work">Arbeid</a></li>
+            <li><a href="about.html" class="ss-footer__link" data-copy="shared.nav.about">Om oss</a></li>
+            <li><a href="contact.html" class="ss-footer__link" data-copy="shared.nav.contact">Kontakt</a></li>
+            <li><a href="guider.html" class="ss-footer__link" data-copy="shared.footer.linkGuides">Guider</a></li>
+          </ul>
+        </nav>
+        <nav class="ss-footer__col" aria-label="Juridisk">
+          <p id="footer-legal-heading" class="ss-footer__heading" data-copy="shared.footer.legalTitle">Juridisk</p>
+          <ul class="ss-footer__list">
+            <li><a href="privacy-policy.html" class="ss-footer__link" data-copy="shared.footer.linkPrivacy">Personvern</a></li>
+            <li><a href="terms-of-service.html" class="ss-footer__link" data-copy="shared.footer.linkTerms">Vilkår</a></li>
+            <li><a href="cookie-policy.html" class="ss-footer__link" data-copy="shared.footer.linkCookies">Informasjonskapsler</a></li>
+            <li><a href="accessibility-statement.html" class="ss-footer__link" data-copy="shared.footer.linkAccessibility">Tilgjengelighet</a></li>
+          </ul>
+        </nav>
+        <nav class="ss-footer__col" aria-label="Samarbeid">
+          <p id="footer-partners-heading" class="ss-footer__heading" data-copy="shared.footer.partnersTitle">Samarbeid</p>
+          <div class="ss-footer__partner">
+            <a href="https://formaa.no/" class="ss-footer__partner-link" target="_blank" rel="noopener" aria-label="Besøk Formaa">
+              <img src="assets/partners/formaa-logo.svg" alt="Formaa" class="ss-footer__partner-logo" width="88" height="24" loading="lazy" decoding="async" />
+            </a>
+            <p class="ss-footer__partner-note" data-copy="shared.footer.partnerFormaaNote">Produktutvikling og design</p>
+          </div>
+        </nav>
+      </div>
+      <div class="ss-footer__cta">
+        <div class="ss-footer__cta-inner">
+          <div>
+            <p class="ss-footer__cta-title" data-copy="shared.footer.ctaTitle">Klar for ny nettside?</p>
+            <p class="ss-footer__cta-body" data-copy="shared.footer.ctaBody">Start med et gratis førsteutkast.</p>
+          </div>
+          <a href="contact.html" class="ss-footer__cta-btn" data-copy="shared.cta.startProjectLong">Få gratis førsteutkast</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/hero-header.js?v=deploy-20260923-2" defer></script>
+  <script src="assets/hero-live.js" defer></script>
+  <script src="assets/site-copy.js?v=deploy-20260923-2"></script>
+  <script src="assets/site-copy-apply.js?v=deploy-20260923-2"></script>
+  <script src="assets/scroll-heading-anim.js?v=deploy-20260923-2"></script>
+  <script src="assets/principle-stat-count.js?v=deploy-20260923-2"></script>
+  <script src="assets/animations.js?v=deploy-20260923-2"></script>
+  <script src="assets/pillar-anim.js?v=deploy-20260923-2"></script>
+  <script src="assets/cookie-consent.js?v=deploy-20260923-2"></script>
+  <script>
+    (function () {
+      document.querySelectorAll(".ss-faq-item").forEach(function (item) {
+        var trigger = item.querySelector(".ss-faq-trigger");
+        var panel = item.querySelector(".ss-faq-panel");
+        if (!trigger || !panel) return;
+        trigger.addEventListener("click", function () {
+          var isOpen = item.classList.toggle("is-open");
+          trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+          panel.setAttribute("aria-hidden", isOpen ? "false" : "true");
+        });
+      });
+    })();
+  </script>
+  <script type="speculationrules">
+  { "prefetch": [{ "where": { "href_matches": "/*" }, "eagerness": "moderate" }] }
+  </script>
+
+</body>
+</html>

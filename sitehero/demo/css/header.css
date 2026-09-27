@@ -1,0 +1,274 @@
+/* Seventh Seal — delt header-krom (felles for alle sider) */
+
+/* Logoen.
+   Ligger her og ikke som Tailwind-klasse fordi 44/52px ikke finnes som
+   token: css/styles.css har h-g5 (40), h-g6 (48) og h-g8 (64), og fila
+   er kompilert output uten byggoppsett i repoet.
+
+   Storrelsen er ikke fritt valgt. Headerhoyden er py-g4 (32+32) +
+   logohoyden + 1px kantlinje, og den maa holde seg over splitten mellom
+   lys og moerk betong i heroen paa forsiden. Trangeste tilfelle er
+   1024x768 med bokmerkelinje: splitten ligger paa 127,7px, og med 52px
+   logo blir headeren 117px - 10,7px klaring.
+
+   h-g8 (64px) ble proevd og forkastet: headeren blir da 129px og havner
+   1,3px UNDER splitten.
+
+   Endres denne, maa --header-h i index.html endres i samme slengen. */
+.site-logo {
+  height: 44px;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .site-logo {
+    height: 52px;
+  }
+}
+
+/* == Headeren snur mot seksjonen den staar over ======================
+   Delt mellom forsiden og panelsiden; skrevet av assets/hero-header.js.
+   Skopet paa html[data-header-flip], saa de fjorten andre sidene som
+   laster denne fila ikke treffes - de har én logo og ingen tilstand.
+
+   data-header-flip="hero"   forsiden: foerste frame er over heroen,
+                             gjennomsiktig med lyst blekk
+   data-header-flip="light"  panelsiden: foerste frame er over en lys
+                             seksjon, hvit flate med moerkt blekk
+   data-header-flip="dark"   tjenestesiden: foerste frame er over en
+                             sort hero som IKKE ligger under headeren,
+                             saa gjennomsiktig (hero) ville vist hvitt.
+                             Sort flate med lyst blekk. Ingen
+                             hash-avgjoerelse i <head>: ankerlenker maler
+                             foerste bilde paa scroll 0 (maalt).
+   data-header-flip="fill"   farget flate, satt per side med variabler
+                             paa :root (arbeid: graa, kontakt: roed):
+                               --header-start        flatens farge
+                               --header-start-ink    0 lyst / 1 moerkt blekk
+                               --header-start-mono   1 = svart-hvit logo
+                               --header-start-aktiv  farge paa aktivt
+                                                     navpunkt (valgfri)
+                             Én generell verdi, ikke én per farge.
+   Verdien avgjoer hva som males FOER skriptet rekker aa kjoere.
+   Foerste-tegning-reglene gjelder BARE foer skriptet har valgt tilstand
+   (:not(.hdr-lys):not(.hdr-ink-light):not(.hdr-ink-dark)). Foer 22.09.2026 gjaldt
+   "dark"-regelen hele tiden, og kantlinja ble staaende 28 % hvit ogsaa i
+   hvit tilstand - hvit paa hvit. Derfor saa ingen streken paa services.
+   Uten den ville panelsiden faatt hvitt blekk paa hvit flate i et
+   blaff, eller forsiden hvit flate over videoen.
+
+   .js settes av et inline-skript i <head> paa begge sidene. Uten JS
+   staar headeren ugjennomsiktig hvit med moerk logo, alltid.
+
+   LOGOEN KAN IKKE ARVE FARGE. Den ligger som et <img> som peker paa en
+   SVG-fil, og en ekstern SVG i et <img> er et eget dokument -
+   currentColor naar ikke inn. Den er dessuten tofarget, 29 monokrome elementer pluss to som
+   er #FF1E3C i BEGGE varianter: filter: invert() ville gjort roedt til
+   cyan, mask-image gitt én farge, og mix-blend-mode: difference slettet
+   rutenettet mot sort. Derfor to filer stablet i samme grid-celle,
+   kryssfadet paa --header-ink. Grid framfor absolutt posisjonering, saa
+   lenka fortsatt maaler seg etter bildene. */
+html[data-header-flip] body > header a[href="/"] {
+  display: grid;
+}
+html[data-header-flip] body > header a[href="/"] > .site-logo {
+  grid-area: 1 / 1;
+}
+html[data-header-flip].js .site-logo--invert {
+  opacity: calc((1 - var(--header-ink, 0)) * (1 - var(--header-mono, 0)));
+}
+html[data-header-flip].js .site-logo--dark {
+  opacity: calc(var(--header-ink, 0) * (1 - var(--header-mono, 0)));
+}
+/* Svart-hvit logo (logo-7s-mono.svg: roedt er hvitt, sort er sort) paa
+   flater der roedt forsvinner - kontakts roede hero. Styres av
+   --header-mono, som skriptet setter fra seksjonens data-header-logo.
+   Uten variabelen er den 0, og de to andre logoene oppfoerer seg som foer. */
+html[data-header-flip].js .site-logo--mono {
+  opacity: var(--header-mono, 0);
+}
+html[data-header-flip]:not(.js) .site-logo--invert,
+html[data-header-flip]:not(.js) .site-logo--mono {
+  display: none;
+}
+
+/* == Flaten ==========================================================
+   Forsiden, over heroen: gjennomsiktig, tonet inn av --header-bg som
+   skriptet setter per scroll-avlesning. INGEN transition paa
+   background-color - verdien ER scrollposisjonen, og en overgang oppaa
+   ville latt flaten henge etter fingeren. Fallbacken 0 holder den
+   gjennomsiktig foer skriptet har kjoert, og --header-ink faller
+   tilbake paa 0 (lyst blekk) i var() over av samme grunn.
+
+   Panelsiden starter over en lys seksjon: hvit flate og blekk 1 fra
+   foerste frame, saa logoen ikke staar hvit paa hvitt til skriptet
+   kommer.
+
+   Over en moerk seksjon: seksjonens egen farge, lest i skriptet.
+   Over en lys: hvit. Begge momentant - referansen skifter uten
+   mellomtoner, maalt over 419 frames. */
+html[data-header-flip="hero"].js body > header {
+  background-color: rgba(255, 255, 255, var(--header-bg, 0));
+}
+html[data-header-flip="light"].js body > header {
+  --header-ink: 1;
+  background-color: #ffffff;
+}
+/* Tjenestesiden: sort fra foerste frame, som over en moerk seksjon.
+   Samme flate og kantlinje som .hdr-ink-light, som tar over naar
+   skriptet har kjoert; --header-ink faller tilbake paa 0, lyst blekk.
+   #000000 er ink-tokenet (bg-ink i styles.css) og heroens egen farge. */
+html[data-header-flip="dark"].js:not(.hdr-lys):not(.hdr-ink-light):not(.hdr-ink-dark) body > header {
+  background-color: #000000;
+  border-bottom-color: rgba(255, 255, 255, 0.28);
+}
+/* Farget flate fra foerste frame, satt per side. Kantlinja er den
+   vanlige sorte (border-ink). */
+html[data-header-flip="fill"].js:not(.hdr-lys):not(.hdr-ink-light):not(.hdr-ink-dark) body > header {
+  background-color: var(--header-start, #ffffff);
+  --header-ink: var(--header-start-ink, 1);
+  --header-mono: var(--header-start-mono, 0);
+  --header-aktiv: var(--header-start-aktiv);
+}
+html[data-header-flip].js.hdr-lys body > header {
+  background-color: #ffffff;
+}
+html[data-header-flip].js.hdr-ink-light body > header {
+  background-color: var(--header-fill, #000000);
+  border-bottom-color: rgba(255, 255, 255, 0.28);
+}
+/* Over en farget seksjon med moerkt blekk (data-header-ink="dark"):
+   seksjonens egen farge, sort kantlinje som i hvit tilstand. */
+html[data-header-flip].js.hdr-ink-dark body > header {
+  background-color: var(--header-fill, #ffffff);
+}
+
+/* Kantlinja over heroen: usynlig til headeren fester seg, saa binaert
+   med overgang - den er en strek, ikke en flate, og en halvt
+   gjennomsiktig hairline leser som uskarphet. Utenfor heroen skifter
+   den momentant med resten. Skriptet setter .is-stuck saa snart
+   headeren har egen flate, ogsaa ved dyplenke rett inn i en seksjon,
+   saa :not(.is-stuck) aldri gjelder utenfor heroen. */
+html[data-header-flip="hero"] body > header {
+  transition: border-color 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+html[data-header-flip="hero"] body > header.is-stuck {
+  transition-duration: 140ms;
+}
+html[data-header-flip="hero"].js body > header:not(.is-stuck) {
+  border-bottom-color: transparent;
+}
+html[data-header-flip].hdr-lys body > header,
+html[data-header-flip].hdr-ink-light body > header,
+html[data-header-flip].hdr-ink-dark body > header {
+  transition: none;
+}
+
+/* == Blekket: nav og MENY ============================================
+   SKOPET TIL DESKTOP-NAVET med > div > nav, ikke "header nav a". Den
+   brede varianten traff mobilmenyen, fordi <details> ligger inne i
+   <header>: dropdown-lenkene sitter paa et ugjennomsiktig hvitt panel
+   og ble hvit tekst paa hvitt. Desktop-navet er direkte barn av
+   headerens flex-div; mobilmenyens nav ligger to nivaa ned. Dropdownen
+   beholder dermed sin egen moerke tekst, ogsaa paa hover:bg-mist.
+
+   BLEKKET ER --header-blekk, med #0a0a0a som reserve. Kontakts roede
+   flate (#E82330) gir 4,44:1 mot #0a0a0a og 4,71:1 mot helsort, saa
+   den sida setter variabelen til #000000. Alle andre sider staar
+   uendret paa reserven.
+
+   color-mix gir samme kontinuerlige verdi som logoens opasitet, drevet
+   av samme variabel. Fallback uten color-mix er hvit - riktig i den
+   tilstanden som varer lengst paa forsiden.
+
+   transition: none nuller Tailwinds transition-colors, ellers ville
+   skiftet tatt 150 ms. Prisen er at hover-fadingen paa lenkene
+   forsvinner. */
+html[data-header-flip].js body > header > div > nav a,
+html[data-header-flip].js body > header summary {
+  color: #ffffff;
+  transition: none;
+}
+@supports (color: color-mix(in srgb, red, blue)) {
+  html[data-header-flip].js body > header > div > nav a,
+  html[data-header-flip].js body > header summary {
+    color: color-mix(in srgb, var(--header-blekk, #0a0a0a) calc(var(--header-ink, 0) * 100%), #ffffff);
+  }
+}
+
+/* MENY-knappen: ramme uten fyll. 2px fordi en 1px strek mot en
+   bevegelig video deles av antialiasingen over to pikselrader og
+   forsvinner optisk lenge foer den forsvinner matematisk. Samme knapp
+   paa begge sidene, saa headeren er identisk.
+
+   hover:bg-mist ville gitt lys flate under hvit tekst. Inverterer i
+   stedet: fyllet blir nav-tekstfargen, teksten det motsatte.
+
+   IKKE currentColor paa bakgrunnen. currentColor loeser seg i den
+   color som gjelder i SAMME regel - altsaa den inverterte teksten rett
+   under - saa flate og tekst lander alltid paa samme verdi. De to
+   miksene maa skrives ut hver for seg, med motsatt rekkefoelge. Kanten
+   ER currentColor, med vilje: den foelger teksten, saa den snur med i
+   hover og forsvinner ikke mot sin egen flate. */
+html[data-header-flip].js body > header summary {
+  border-width: 2px;
+  border-color: currentColor;
+  background-color: transparent;
+}
+html[data-header-flip].js body > header summary:hover {
+  background-color: color-mix(in srgb, var(--header-blekk, #0a0a0a) calc(var(--header-ink, 0) * 100%), #ffffff);
+  color: color-mix(in srgb, #ffffff calc(var(--header-ink, 0) * 100%), var(--header-blekk, #0a0a0a));
+}
+@supports not (color: color-mix(in srgb, red, blue)) {
+  html[data-header-flip].js body > header summary:hover {
+    background-color: #ffffff;
+    color: #0a0a0a;
+  }
+}
+
+/* Aktiv lenke staar roed i begge tilstander, men ikke i samme roed:
+   #ff1e3c gir 5,50:1 mot sort og bare 3,82:1 mot hvit, som er under
+   4,5:1 for 12 px. Den bytter derfor tone med resten av headeren, paa
+   samme variabel og i samme kall - de kan ikke komme ut av fase.
+   Maalt: 5,50:1 i moerk tilstand, 5,37:1 i lys. */
+html[data-header-flip].js body > header > div > nav a[aria-current="page"] {
+  color: var(--header-aktiv, #ff1e3c);
+  /* samme verdi som .border-accent gir i dag, saa lenge ingen side
+     setter --header-aktiv */
+  border-bottom-color: var(--header-aktiv, #ff1e3c);
+}
+@supports (color: color-mix(in srgb, red, blue)) {
+  html[data-header-flip].js body > header > div > nav a[aria-current="page"] {
+    color: var(--header-aktiv, color-mix(in srgb, var(--accent-text, #d70022) calc(var(--header-ink, 0) * 100%), #ff1e3c));
+  }
+}
+
+/* Reduced-motion: hero-faden blir binaer ved terskelen. Loest i CSS
+   framfor i JS, saa det reagerer naar brukeren endrer innstillingen
+   ETTER sidelast - JS leser matchMedia bare en gang. Skriptet
+   fortsetter aa sette --header-bg; den ignoreres her.
+
+   De to siste reglene staar ETTER .is-stuck-regelen med vilje: lik
+   spesifisitet, saa kilderekkefoelgen avgjoer. Uten dem ville
+   .is-stuck - som alltid er satt utenfor heroen - malt headeren hvit
+   over de moerke seksjonene naar reduced-motion er paa. */
+@media (prefers-reduced-motion: reduce) {
+  html[data-header-flip="hero"] body > header {
+    transition: none;
+  }
+  html[data-header-flip="hero"].js body > header {
+    background-color: transparent;
+  }
+  html[data-header-flip="hero"].js body > header.is-stuck {
+    background-color: #ffffff;
+  }
+  html[data-header-flip].js.hdr-lys body > header {
+    background-color: #ffffff;
+  }
+  html[data-header-flip].js.hdr-ink-light body > header {
+    background-color: var(--header-fill, #000000);
+  }
+  html[data-header-flip].js.hdr-ink-dark body > header {
+    background-color: var(--header-fill, #ffffff);
+  }
+}

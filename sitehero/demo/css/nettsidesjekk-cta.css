@@ -1,0 +1,64 @@
+/* Nettsidesjekk CTA — lys variant av ss-cta-band (fasit: index.html) */
+
+/* Vakten står: den fanget 100vw-overskytelsen da bandet brukte den, og
+   den koster ingenting nå. Merk at overflow: clip ikke finnes før
+   Safari 16 - derfor er 100vw fjernet under, ikke bare klippet. */
+html:has(.ss-nettsidesjekk-band) {
+  overflow-x: clip;
+}
+
+.ss-nettsidesjekk-band {
+  /* Luft over kortet — margin, ikke padding, så topplinjer sitter samlet øverst i bandet */
+  margin-top: clamp(1.25rem, 3.5vw, 2rem);
+  padding-top: 0;
+  /* FULL BREDDE UTEN VIEWPORT-ENHET. Bandet laa foer paa
+     width/max-width: 100vw med margin-left: calc(50% - 50vw). 100vw
+     teller med rullefeltet i nettlesere med klassisk rullefelt, saa
+     elementet ble bredere enn det synlige omraadet.
+     Forelderen er maalt paa alle aatte sidene som bruker bandet: den
+     spenner hele viewporten (x = 0, bredde = innerWidth) og har ingen
+     sidepadding - section.contact-form-section paa kontakt, main.flex-1
+     paa de sju andre. Da er et vanlig blokkelement noeyaktig like
+     bredt, uten aa spoerre viewporten om noe. */
+  width: auto;
+  max-width: none;
+  margin-left: 0;
+  box-sizing: border-box;
+}
+
+/* Panelet er 128 px bredere enn viewporten (64 px paa hver side) og
+   rotert. Innerboksen har max-w-grid (1200) + mx-auto, saa auto-margene
+   slaar bare ut naar panelet er BREDERE enn 1200. Paa 1024 er panelet
+   1152 px: margene blir 0, innerboksen arver hele panelbredden fra
+   x = -68,7, og da havner H1 paa -17,2 og knappen 18 px forbi hoyre
+   kant (maalt paa 1024x1366). Taket under holder innerboksen innenfor
+   viewporten paa alle bredder; panelet er symmetrisk om viewporten, saa
+   sentrering i panelet er sentrering i viewporten. */
+.ss-nettsidesjekk-band__inner {
+  max-width: min(1200px, 100% - 128px);
+}
+
+.ss-nettsidesjekk-band__panel {
+  width: 100%;
+  border-top: none;
+  border-bottom: 1px solid #0a0a0a;
+}
+
+.ss-nettsidesjekk-band__line {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #ff1e3c;
+}
+
+/* Svart + rød topplinje i ett element, direkte øverst i bandet */
+.ss-nettsidesjekk-band__line--top {
+  height: 2px;
+  box-sizing: content-box;
+  border-top: 1px solid #0a0a0a;
+}
+
+.ss-nettsidesjekk-band__line--bottom {
+  height: 2px;
+}

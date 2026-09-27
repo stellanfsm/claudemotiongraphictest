@@ -1,0 +1,62 @@
+/* == Levende hero ==================================================
+   Hoerer til assets/hero-live.js. Layouten eies fortsatt av
+   .hero__media i index.html; her staar bare det som er nytt.
+
+   Uten JS (eller foer skriptet har startet) viser lerretet posteren,
+   saa heroen aldri er et tomt sort felt. prefers-reduced-motion
+   skjuler .hero__media som foer, og posteren males paa .hero. */
+.hero-live {
+  background: #000000 url("../assets/hero-7s-poster.webp") center / cover no-repeat;
+}
+.hero-live.is-live {
+  background: #000000;
+}
+
+/* H1 og knappene kommer inn sammen med «warpen». Bare med JS (html.js,
+   satt i <head>) og bare uten redusert bevegelse. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js .hero h1 {
+    animation: hero-reis 1100ms cubic-bezier(0.16, 1, 0.3, 1) 150ms both;
+  }
+  html.js .hero .index-hero-actions {
+    animation: hero-inn 900ms cubic-bezier(0.16, 1, 0.3, 1) 550ms both;
+  }
+  /* «nettsider» faar en roed strek som tegnes inn etter overskriften.
+     #ff1e3c mot sort er 5,50:1 (accent.css), og streken er pynt, ikke
+     tekst. */
+  html.js .hero h1 span {
+    background: linear-gradient(#ff1e3c, #ff1e3c) no-repeat 0 94% / 0 0.09em;
+    animation: hero-strek 700ms cubic-bezier(0.65, 0, 0.35, 1) 1050ms forwards;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero h1 span {
+    background: linear-gradient(#ff1e3c, #ff1e3c) no-repeat 0 94% / 100% 0.09em;
+  }
+}
+
+@keyframes hero-reis {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(0.3em);
+  }
+  to {
+    clip-path: inset(-0.3em -0.3em -0.3em -0.3em);
+    transform: none;
+  }
+}
+@keyframes hero-inn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes hero-strek {
+  to {
+    background-size: 100% 0.09em;
+  }
+}
