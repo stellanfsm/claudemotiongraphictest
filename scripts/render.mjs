@@ -5,6 +5,7 @@
 //   node scripts/render.mjs                    full render → showreel.mp4
 //   node scripts/render.mjs --stills 0.6,3.3   just PNG stills at those times
 //   node scripts/render.mjs --subsamples 1     fast draft (no motion blur)
+//   node scripts/render.mjs --src seventhseal/src --out seventhseal/seventhseal-reel.mp4
 
 import { chromium } from 'playwright';
 import http from 'node:http';
@@ -13,11 +14,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { renderSoundtrack } from '../src/audio.js';
-import { FPS, DURATION } from '../src/timeline.js';
-
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const SRC = path.join(ROOT, 'src');
 
 const args = Object.fromEntries(
   process.argv.slice(2).reduce((acc, a, i, all) => {
@@ -25,13 +22,24 @@ const args = Object.fromEntries(
     return acc;
   }, []),
 );
+const SRC = path.resolve(ROOT, args.src ?? 'src');
+const { renderSoundtrack } = await import(path.join(SRC, 'audio.js'));
+const { FPS, DURATION } = await import(path.join(SRC, 'timeline.js'));
 const subsamples = Number(args.subsamples ?? 10);
 const workers = Number(args.workers ?? Math.max(1, os.cpus().length));
 const out = path.resolve(ROOT, args.out ?? 'showreel.mp4');
 const work = path.resolve(args.work ?? path.join(os.tmpdir(), 'reel-frames'));
 const ffmpeg = process.env.FFMPEG ?? 'ffmpeg';
 
-const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.woff2': 'font/woff2' };
+const MIME = {
+  '.html': 'text/html',
+  '.js': 'text/javascript',
+  '.woff2': 'font/woff2',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+  '.jpg': 'image/jpeg',
+  '.png': 'image/png',
+};
 const server = http.createServer((req, res) => {
   const p = path.join(SRC, decodeURIComponent(new URL(req.url, 'http://x').pathname));
   if (!p.startsWith(SRC) || !fs.existsSync(p) || fs.statSync(p).isDirectory()) {

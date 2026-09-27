@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "render": "node scripts/render.mjs",
-    "draft": "node scripts/render.mjs --subsamples 1 --out showreel-draft.mp4"
+    "draft": "node scripts/render.mjs --subsamples 1 --out showreel-draft.mp4",
+    "render:seventhseal": "node scripts/render.mjs --src seventhseal/src --out seventhseal/seventhseal-reel.mp4"
   },
   "repository": {
     "type": "git",
@@ -19,9 +20,13 @@
   },
   "homepage": "https://github.com/stellanfsm/claudemotiongraphictest#readme",
   "devDependencies": {
+    "@fontsource/anton": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
     "@fontsource/instrument-serif": "^5.3.0",
     "@fontsource/inter-tight": "^5.3.0",
     "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/oswald": "^5.3.0",
     "playwright": "^1.56.1"
   },
   "type": "module"
