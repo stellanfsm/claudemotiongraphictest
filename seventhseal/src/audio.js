@@ -2,7 +2,7 @@
 // the same code renders the WAV for the video in Node and plays live in the
 // browser preview. Every hit is placed from the shared timeline.
 
-import { BEAT, BAR, DURATION, HITS, WHOOSHES, CHORDS, DIAMOND_BEATS, at } from './timeline.js';
+import { BEAT, BAR, DURATION, HITS, WHOOSHES, CHORDS, DIAMOND_BEATS, S, MONTAGE_CUTS, TAGLINE_IDAG, WORK_QUOTE, PRICE_CHECKS, PILLAR_CHASE, CLICK_T, at } from './timeline.js';
 
 const TAU = Math.PI * 2;
 const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
@@ -317,79 +317,95 @@ export function renderSoundtrack(sr = 48000) {
   }
 
   // ─── arrangement ─────────────────────────────────────────────────────────
-  // Bar 0 — cold open: the board fills in, the four diamonds of the seal land
+  const sb = (id, beats = 0) => S[id].start + beats * BEAT;
+  const G0 = S.tagline.bar; // groove runs from the tagline…
+  const G1 = S.contact.bar; // …until the end card
+  const dropBar = S.process.bar;
+  const riserBar = dropBar - 1;
+
+  // seal — the board fills in, the four diamonds land
   pad(CHORDS[0], 0, BAR, 0.035);
   for (let k = 0; k < 14; k++) tick(0.04 + k * 0.026, 2600 + (k % 4) * 380, 0.35, (k / 13) * 1.2 - 0.6);
   DIAMOND_BEATS.forEach((b, i) => {
-    clack(at(0, b), i === 3 ? 1.1 : 0.85, [-0.5, 0.5, -0.2, 0.2][i]);
-    if (i === 3) thud(at(0, b), 0.7);
+    clack(sb('seal', b), i === 3 ? 1.1 : 0.85, [-0.5, 0.5, -0.2, 0.2][i]);
+    if (i === 3) thud(sb('seal', b), 0.7);
   });
-  pluck(62 + 12, at(0, 3), 1.2, 0);
-  pluck(69 + 12, at(0, 3.25), 1, 0.3);
-  reverse(at(1), 0.45, 1.2);
+  pluck(62 + 12, sb('seal', 3), 1.2, 0);
+  pluck(69 + 12, sb('seal', 3.25), 1, 0.3);
+  reverse(S.tagline.start, 0.45, 1.2);
 
-  // Groove bars 1–6
-  for (let bar = 1; bar <= 6; bar++) {
+  // groove
+  for (let bar = G0; bar < G1; bar++) {
     const ch = CHORDS[bar];
+    const inDrop = bar >= dropBar;
     for (let b = 0; b < 4; b++) {
       const tb = at(bar, b);
-      const rollBar = bar === 5 && b >= 2;
-      if (!rollBar) kick(tb, bar === 6 ? 1.05 : 1);
-      if (bar >= 2 && (b === 1 || b === 3) && !rollBar) clap(tb, 1, 0);
-      if (bar >= 1) hat(tb + BEAT / 2, 0.9, true, 0.25);
-      if (bar >= 2) for (const s of [0.25, 0.75]) hat(tb + BEAT * s, 0.55, false, -0.25);
+      const rollBeat = bar === riserBar && b >= 2;
+      if (!rollBeat) kick(tb, inDrop ? 1.05 : 1);
+      if (bar >= S.storm.bar && (b === 1 || b === 3) && !rollBeat) clap(tb, 1, 0);
+      hat(tb + BEAT / 2, 0.9, true, 0.25);
+      if (bar >= S.storm.bar) for (const x of [0.25, 0.75]) hat(tb + BEAT * x, 0.55, false, -0.25);
     }
-    // bass
     const pat = [0, 0, 12, 0, 0, 12, 0, 7];
     for (let e = 0; e < 8; e++) {
-      if (bar === 5 && e >= 4) break;
+      if (bar === riserBar && e >= 4) break;
       bass(ch[0] - 24 + pat[e], at(bar, e / 2), BEAT / 2 - 0.04);
     }
-    pad(ch, at(bar), BAR, bar === 6 ? 0.045 : 0.05, bar === 5 ? 1 : 0);
-  }
-
-  // plucks bars 2–5
-  for (let bar = 2; bar <= 5; bar++) {
-    const ch = CHORDS[bar];
-    for (let s = 0; s < 16; s++) {
-      const n = ch[s % 3] + 12 * (Math.floor(s / 3) % 2) + 12;
-      pluck(n, at(bar, s / 4), s % 4 === 0 ? 1.2 : 0.75, (s % 2 ? 1 : -1) * 0.35);
+    pad(ch, at(bar), BAR, inDrop ? 0.045 : 0.05, bar === riserBar ? 1 : 0);
+    // plucks through the middle section
+    if (bar >= S.storm.bar && bar < riserBar) {
+      for (let x = 0; x < 16; x++) {
+        const n = ch[x % 3] + 12 * (Math.floor(x / 3) % 2) + 12;
+        pluck(n, at(bar, x / 4), x % 4 === 0 ? 1.2 : 0.75, (x % 2 ? 1 : -1) * 0.35);
+      }
     }
   }
 
-  // work scene: a scroll tick on every half beat
-  for (let b = 0; b < 8; b++) tick(at(4, b / 2) + 0.005, 2000 + (b % 3) * 300, 0.8, (b % 2 ? 1 : -1) * 0.4);
-  // price scene: checklist ticks
-  for (let b = 1; b <= 5; b++) tick(at(5, b / 2) + 0.01, 3000, 0.9, 0.35);
+  // tagline: "i dag."
+  pluck(74 + 12, sb('tagline', TAGLINE_IDAG), 1.3, 0);
 
-  // bar 5: riser + snare roll into the drop
-  riser(at(5), at(6), 1);
+  // pillars: a bright tick as each pillar lights up
+  for (let i = 0; i < 7; i++) tick(S.pillars.start + PILLAR_CHASE.start + i * PILLAR_CHASE.step, 1800 + i * 220, 0.9, (i / 6) * 1.2 - 0.6);
+
+  // work: a scroll tick on every beat, and the quote card
+  for (let b = 1; b < S.work.bars * 4 - 1; b++) tick(sb('work', b) + 0.005, 2000 + (b % 3) * 300, 0.6, (b % 2 ? 1 : -1) * 0.4);
+  pluck(77 + 12, sb('work', WORK_QUOTE), 1.1, 0.3);
+
+  // price: checklist ticks, then riser + snare roll into the drop
+  PRICE_CHECKS.forEach((b) => tick(sb('price', b) + 0.01, 3000, 0.9, 0.35));
+  riser(at(riserBar), at(dropBar), 1);
   const roll = [2, 2.5, 3, 3.25, 3.5, 3.625, 3.75, 3.8125, 3.875, 3.9375];
-  roll.forEach((b, k) => clap(at(5, b), 0.35 + (k / roll.length) * 0.8, (k % 2 ? 1 : -1) * 0.2));
+  roll.forEach((b, k) => clap(at(riserBar, b), 0.35 + (k / roll.length) * 0.8, (k % 2 ? 1 : -1) * 0.2));
 
-  // bar 6: montage stabs on every half beat
-  for (let k = 0; k < 8; k++) {
-    const ch = CHORDS[6].map((m) => m + 12);
-    stab(ch, at(6, k / 2), k === 0 ? 1.4 : 1, (k % 2 ? 1 : -1) * 0.4);
-  }
-  for (let k = 0; k < 9; k++) tick(at(6, 0.5) + k * 0.024, 4200 - (k % 3) * 500, 0.45, (k % 2 ? 1 : -1) * 0.3); // typing
-  glitch(at(6, 2), 0.08);
-  reverse(at(7), 0.5, 1.6);
-  for (let k = 0; k < 10; k++) tick(at(6, 3.5) + k * 0.022, 1800 + k * 180, 0.7, 0);
+  // process: a stab on every cut, plus per-cut foley
+  MONTAGE_CUTS.forEach((cut, k) => {
+    const ch = CHORDS[Math.floor(cut.start / BAR + 1e-6)].map((m) => m + 12);
+    stab(ch, cut.start, k === 0 ? 1.4 : 1, (k % 2 ? 1 : -1) * 0.4);
+  });
+  const code = MONTAGE_CUTS[1].start;
+  for (let k = 0; k < 24; k++) tick(code + 0.05 + k * 0.028, 4200 - (k % 3) * 500, 0.4, (k % 2 ? 1 : -1) * 0.3);
+  const admin = MONTAGE_CUTS[3].start;
+  for (let k = 0; k < 28; k++) tick(admin + 0.1 + k * 0.036, 3900 - (k % 4) * 300, 0.35, 0.2);
+  tick(MONTAGE_CUTS[5].start + 0.14, 1400, 1.3, 0); // the padlock snaps shut
+  const google = MONTAGE_CUTS[7].start;
+  for (let k = 0; k < 20; k++) tick(google + 0.04 + k * 0.017, 4000 - (k % 3) * 400, 0.3, -0.2);
+  reverse(S.contact.start, 0.5, 1.6);
 
-  // bar 7: the end card
-  pad([38, 50, 53, 57, 64], at(7), BAR - 0.3, 0.05);
-  DIAMOND_BEATS.forEach((b, i) => clack(at(7, 0.1 + i * 0.2), 0.45, [-0.5, 0.5, -0.2, 0.2][i]));
-  bell(74, at(7, 1.0), 1, -0.3);
-  bell(77, at(7, 1.5), 0.9, 0.3);
-  bell(81, at(7, 2.0), 0.8, -0.1);
-  bell(86, at(7, 2.75), 0.7, 0.2);
-  tick(at(7) + 1.28, 1500, 1.2, 0.3); // the button click
+  // contact: lockup, bells, the click
+  pad([38, 50, 53, 57, 64], S.contact.start, S.contact.end - S.contact.start - 0.6, 0.05);
+  DIAMOND_BEATS.forEach((b, i) => clack(sb('contact', 0.1 + i * 0.2), 0.45, [-0.5, 0.5, -0.2, 0.2][i]));
+  bell(74, sb('contact', 1.0), 1, -0.3);
+  bell(77, sb('contact', 1.5), 0.9, 0.3);
+  bell(81, sb('contact', 2.0), 0.8, -0.1);
+  bell(86, sb('contact', 2.75), 0.7, 0.2);
+  tick(CLICK_T, 1500, 1.2, 0.3);
+  kick(sb('contact', 8), 0.7);
+  bell(62 + 12, sb('contact', 8), 0.8, 0);
 
   // impacts & whooshes from the shared timeline
   for (const h of HITS) {
-    if (h.t < at(1)) continue; // bar 0 uses the clacks
-    if (h.t > at(6) && h.t < at(7)) continue; // montage uses stabs
+    if (h.t < S.tagline.start) continue; // the seal uses the clacks
+    if (h.t > S.process.start && h.t < S.contact.start) continue; // montage uses stabs
     if (h.s >= 0.5) impact(h.t, h.s);
   }
   for (const w of WHOOSHES) whoosh(w.t, w.dur, w.dir);
@@ -470,7 +486,7 @@ export function renderSoundtrack(sr = 48000) {
   }
   const g = 0.93 / peak;
   const fadeIn = Math.floor(0.004 * sr);
-  const fadeOut = Math.floor(0.35 * sr);
+  const fadeOut = Math.floor(0.9 * sr);
   for (let i = 0; i < N; i++) {
     let e = g;
     if (i < fadeIn) e *= i / fadeIn;

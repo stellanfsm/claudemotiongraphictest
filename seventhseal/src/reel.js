@@ -4,7 +4,25 @@
 // sub-frame motion blur. Brand material (logo geometry, palette, type, copy and
 // case studies) comes from seventhseal.no.
 
-import { W, H, FPS, BEAT, BAR, DURATION, SCENES, HITS, MONTAGE_LABELS, DIAMOND_BEATS, at } from './timeline.js';
+import {
+  W,
+  H,
+  FPS,
+  BEAT,
+  BAR,
+  DURATION,
+  SCENES,
+  S,
+  HITS,
+  MONTAGE_CUTS,
+  MONTAGE_LABELS,
+  DIAMOND_BEATS,
+  TAGLINE_IDAG,
+  WORK_QUOTE,
+  PRICE_CHECKS,
+  PILLAR_CHASE,
+  CLICK_T,
+} from './timeline.js';
 
 export { W, H, FPS, DURATION };
 
@@ -140,8 +158,10 @@ function riseText(c, str, x, base, font, color, lt, start, { tracking = 0, stagg
   return L.width;
 }
 
+let SD = BAR; // duration of the scene being drawn
+
 function kickEnv(t) {
-  if (t < BAR || t >= 7 * BAR) return 0;
+  if (t < S.tagline.start || t >= S.contact.start) return 0;
   return Math.exp(-(t % BEAT) * 10);
 }
 
@@ -325,7 +345,7 @@ function sceneSeal(c, lt, t) {
 // 02 — VISJON: "Designer morgendagens nettsider, i dag."
 // ════════════════════════════════════════════════════════════════════════════
 function sceneTagline(c, lt) {
-  if (lt < 3 * BEAT) {
+  if (lt < TAGLINE_IDAG * BEAT) {
     fillBg(c, RED);
     const push = 1 + lt * 0.025;
     c.save();
@@ -355,7 +375,7 @@ function sceneTagline(c, lt) {
   c.font = font;
   for (let j = 0; j < L.glyphs.length; j++) {
     const g = L.glyphs[j];
-    const st = 3 * BEAT + j * 0.03;
+    const st = TAGLINE_IDAG * BEAT + j * 0.03;
     const s = E.outBack(prog(lt, st, st + 0.24), 2.4);
     if (s <= 0) continue;
     c.save();
@@ -365,7 +385,7 @@ function sceneTagline(c, lt) {
     c.fillText(g.ch, -g.w / 2, 0);
     c.restore();
   }
-  checkerWipe(c, prog(lt, 3.5 * BEAT, 4 * BEAT), WHITE, 'in');
+  checkerWipe(c, prog(lt, SD - 0.5 * BEAT, SD), WHITE, 'in');
 }
 
 // Board-square wipe: 'in' covers the frame column by column, 'out' uncovers.
@@ -415,7 +435,7 @@ function sceneStorm(c, lt, t) {
   fillBg(c, BLACK);
   const F = 900;
   const D = 4200;
-  const camZ = lt * 2400 + E.inExpo(prog(lt, 1.35, 1.875)) * 5200;
+  const camZ = lt * 2400 + E.inExpo(prog(lt, SD - 0.525, SD)) * 5200;
   const items = [];
   for (const g of STORM) {
     let z = ((((g.z - camZ) % D) + D) % D) + 40;
@@ -447,7 +467,7 @@ function sceneStorm(c, lt, t) {
   c.textBaseline = 'alphabetic';
 
   // headline on a black band
-  const out = E.inExpo(prog(lt, 3.5 * BEAT, 4 * BEAT));
+  const out = E.inExpo(prog(lt, SD - 0.5 * BEAT, SD));
   const band = E.outExpo(prog(lt, BEAT - 0.05, BEAT + 0.3));
   if (band > 0) {
     c.save();
@@ -467,7 +487,7 @@ function sceneStorm(c, lt, t) {
     const L = layout(c, 'uten ', font, -5);
     riseText(c, 'uten ', W / 2 - w2 / 2, 670, font, WHITE, lt, 2 * BEAT, { tracking: -5, size: 150, stagger: 0.016 });
     riseText(c, 'byråpris.', W / 2 - w2 / 2 + L.width + 5, 670, font, RED, lt, 2 * BEAT + 0.08, { tracking: -5, size: 150, stagger: 0.016 });
-    mono(c, typed('HØY KVALITET TIL EN BRØKDEL AV PRISEN HOS TRADISJONELLE BYRÅER', prog(lt, 2.5 * BEAT, 3.2 * BEAT)), W / 2, 735, 19, WHITE, 0.75, 'center', 500);
+    mono(c, typed('HØY KVALITET TIL EN BRØKDEL AV PRISEN HOS TRADISJONELLE BYRÅER', prog(lt, 2.5 * BEAT, 4 * BEAT)), W / 2, 735, 19, WHITE, 0.75, 'center', 500);
     c.restore();
   }
 
@@ -489,9 +509,9 @@ const PILLARS = ['PROFESJONELT DESIGN', 'STRUKTUR OG NAVIGASJON', 'TYDELIG KOMMU
 function scenePillars(c, lt) {
   fillBg(c, BLACK);
   const F = 1000;
-  const camX = lerp(-90, 90, E.inOutSine(prog(lt, 0, 1.875)));
+  const camX = lerp(-90, 90, E.inOutSine(prog(lt, 0, SD)));
   const camY = -60;
-  const camZ = lerp(-1750, -1380, E.outCubic(prog(lt, 0, 1.875)));
+  const camZ = lerp(-1750, -1380, E.outCubic(prog(lt, 0, SD)));
   const floor = 520;
   const P = (x, y, z) => {
     const s = F / (z - camZ);
@@ -509,7 +529,7 @@ function scenePillars(c, lt) {
   const pw = 150;
   const pd = 150;
   const Hmax = 1160;
-  const drop = (i) => E.inExpo(prog(lt, 1.6 + (6 - i) * 0.02, 1.84 + (6 - i) * 0.02));
+  const drop = (i) => E.inExpo(prog(lt, SD - 0.275 + (6 - i) * 0.02, SD - 0.035 + (6 - i) * 0.02));
   const caps = [];
   const order = [0, 1, 2, 3, 4, 5, 6].sort((a, b) => Math.abs((b - 3) * 300 - camX) - Math.abs((a - 3) * 300 - camX));
   for (const i of order) {
@@ -551,9 +571,12 @@ function scenePillars(c, lt) {
     c.drawImage(concrete, ax - (i * 97) % 300, ay, (bx - ax) * 4, (bx - ax) * 4 * 4);
     c.globalCompositeOperation = 'source-over';
     // red capital chases across the pillars on 16ths
-    const cs = 0.93 + i * 0.1;
-    const hi = smooth(cs, cs + 0.05, lt) * (1 - smooth(cs + 0.18, cs + 0.3, lt));
-    const lit = smooth(1.55, 1.62, lt); // all seven lit together at the end
+    // guided reading: each pillar lights up for one beat, in order
+    const { start: c0, step } = PILLAR_CHASE;
+    const cs = c0 + i * step;
+    const hi = smooth(cs, cs + 0.06, lt) * (1 - smooth(cs + step, cs + step + 0.12, lt));
+    const allOn = c0 + 7 * step;
+    const lit = smooth(allOn, allOn + 0.1, lt); // then all seven together
     const capH = 170 * s;
     c.fillStyle = mix('#1a1a1a', RED, clamp(lit + hi));
     c.globalAlpha = 0.25 + 0.75 * clamp(lit + hi);
@@ -568,9 +591,9 @@ function scenePillars(c, lt) {
     c.save();
     c.translate((ax + bx) / 2 + 12 * s, by - 50 * s);
     c.rotate(-Math.PI / 2);
-    c.font = `700 ${30 * s}px ${SANS}`;
-    c.fillStyle = BLACK;
-    c.globalAlpha = 0.82;
+    c.font = `700 ${34 * s}px ${SANS}`;
+    c.fillStyle = mix(BLACK, RED, hi);
+    c.globalAlpha = 0.82 + 0.18 * hi;
     c.textAlign = 'left';
     c.fillText(PILLARS[i], 0, 0);
     c.restore();
@@ -654,7 +677,7 @@ function browserWindow(c, x, y, w, h, img, scroll, url) {
 
 function sceneWork(c, lt) {
   fillBg(c, GRAY);
-  const out = (i) => E.inExpo(prog(lt, 3.45 * BEAT + i * 0.04, 3.9 * BEAT + i * 0.04));
+  const out = (i) => E.inExpo(prog(lt, SD - 0.55 * BEAT + i * 0.04, SD - 0.1 * BEAT + i * 0.04));
   riseText(c, 'Arbeid', 150, 205, `700 118px ${SANS}`, BLACK, lt, 0.02, { tracking: -4, size: 118 });
   c.fillStyle = RED;
   drawDiamond(c, 128, 170, 3.2 * E.outBack(prog(lt, 0.05, 0.3), 3));
@@ -669,10 +692,12 @@ function sceneWork(c, lt) {
     const x = 150 + i * (w + 60);
     const y = 280 + (1 - p) * 760 - out(i) * 1300;
     const img = IMAGES[wk.key];
-    const q = (lt - 0.3 - i * 0.08) / (BEAT / 2);
+    const q = (lt - 0.3 - i * 0.08) / BEAT;
     const n = Math.floor(q);
-    const eased = q < 0 ? 0 : n + E.outExpo(clamp((q - n) / 0.55));
-    const scroll = clamp(eased * 430, 0, img.height - (hgt - 42) / (w / img.width));
+    const eased = q < 0 ? 0 : n + E.outExpo(clamp((q - n) / 0.45));
+    const maxScroll = img.height - (hgt - 42) / (w / img.width);
+    const steps = (SD - 0.3) / BEAT - 1.5; // reach the bottom just before the exit
+    const scroll = clamp((eased * maxScroll) / steps, 0, maxScroll);
     c.save();
     c.translate(x + w / 2, y + hgt / 2);
     c.rotate((1 - p) * (i - 1) * 0.12);
@@ -685,13 +710,13 @@ function sceneWork(c, lt) {
   });
 
   // testimonial card → grows into the next scene's red
-  const qa = E.outBack(prog(lt, 2.5 * BEAT, 2.5 * BEAT + 0.25), 2);
+  const qa = E.outBack(prog(lt, WORK_QUOTE * BEAT, WORK_QUOTE * BEAT + 0.25), 2);
   if (qa > 0) {
-    const grow = E.inExpo(prog(lt, 3.5 * BEAT, 4 * BEAT));
+    const grow = E.inExpo(prog(lt, SD - 0.5 * BEAT, SD));
     const cw = 600;
     const ch = 170;
     const cx = lerp(1300, W / 2, grow);
-    const cy = lerp(790, H / 2, grow);
+    const cy = lerp(700, H / 2, grow);
     c.save();
     c.translate(cx, cy);
     c.scale(qa * (1 + grow * 3.4), qa * (1 + grow * 6.8));
@@ -719,7 +744,7 @@ function scenePrice(c, lt) {
   c.rotate(-Math.PI / 4);
   c.fillStyle = DRED;
   c.globalAlpha = 0.35;
-  const speed = lt * 180 + E.inExpo(prog(lt, 0.9, 1.875)) * 900;
+  const speed = lt * 180 + E.inExpo(prog(lt, SD - BAR / 2, SD)) * 1400;
   for (let x = -1800; x < 1800; x += 120) c.fillRect(x + (speed % 120), -1600, 40, 3200);
   c.restore();
 
@@ -762,7 +787,7 @@ function scenePrice(c, lt) {
 
   // checklist
   CHECKS.forEach((str, i) => {
-    const st = (i + 1) * 0.5 * BEAT;
+    const st = PRICE_CHECKS[i] * BEAT;
     const p = E.outExpo(prog(lt, st, st + 0.3));
     if (p <= 0) return;
     const y = 330 + i * 100;
@@ -809,7 +834,7 @@ function scenePrice(c, lt) {
   });
 
   // black board wipe into the montage
-  checkerWipe(c, prog(lt, 3.5 * BEAT, 4 * BEAT), BLACK, 'in');
+  checkerWipe(c, prog(lt, SD - 0.5 * BEAT, SD), BLACK, 'in');
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -817,10 +842,17 @@ function scenePrice(c, lt) {
 // ════════════════════════════════════════════════════════════════════════════
 const HB = BEAT / 2;
 
+const cutIndex = (t) => {
+  let k = 0;
+  while (k < MONTAGE_CUTS.length - 1 && t >= MONTAGE_CUTS[k + 1].start - 1e-9) k++;
+  return k;
+};
+
 function sceneProcess(c, lt, t) {
-  const k = Math.min(7, Math.floor(lt / HB));
-  const u = lt - k * HB;
-  const uq = frameLt(lt, t) - k * HB;
+  const k = cutIndex(t);
+  const rel = MONTAGE_CUTS[k].start - S.process.start;
+  const u = lt - rel;
+  const uq = frameLt(lt, t) - rel;
   const punch = 1 + 0.08 * (1 - E.outExpo(prog(u, 0, 0.16)));
   c.save();
   c.translate(W / 2, H / 2);
@@ -920,7 +952,7 @@ const CODE = [
 function cutCode(c, u) {
   fillBg(c, BLACK);
   const total = CODE.reduce((a, l) => a + l.length, 0);
-  let n = Math.floor(clamp(u / (HB * 0.8)) * total);
+  let n = Math.floor(clamp((u - 0.05) / 0.62) * total);
   c.font = `500 34px ${MONO}`;
   CODE.forEach((l, i) => {
     const y = 290 + i * 62;
@@ -946,7 +978,7 @@ function cutCode(c, u) {
 
 function cutResponsive(c, u) {
   fillBg(c, GRAY);
-  const p = E.inOutCubic(prog(u, 0.02, 0.2));
+  const p = E.inOutCubic(prog(u, 0.08, 0.5));
   const fw = lerp(1240, 380, p);
   const fh = lerp(700, 740, p);
   const fx = W / 2 - fw / 2 + 180;
@@ -1009,7 +1041,7 @@ function cutAdmin(c, u, uq) {
   c.fillStyle = GRAY;
   c.fillRect(480, 150, 1300, 780);
   const msg = 'Nye åpningstider fra mandag!';
-  const n = Math.floor(clamp((uq - 0.03) / (HB * 0.75)) * msg.length);
+  const n = Math.floor(clamp((uq - 0.1) / 1.0) * msg.length);
   const f = `700 64px ${SANS}`;
   c.font = f;
   const tw = c.measureText(msg.slice(0, n)).width;
@@ -1035,7 +1067,7 @@ function cutAdmin(c, u, uq) {
 
 function statCut(c, u, uq, bg, fg, sub, num, subCol) {
   fillBg(c, bg);
-  const v = Math.round(num * E.outExpo(prog(uq, 0, 0.17)));
+  const v = Math.round(num * E.outExpo(prog(uq, 0, 0.35)));
   c.font = `400 400px ${COND}`;
   c.fillStyle = fg;
   c.textAlign = 'center';
@@ -1043,7 +1075,7 @@ function statCut(c, u, uq, bg, fg, sub, num, subCol) {
   c.textAlign = 'left';
   const f = `500 40px ${SANS}`;
   const L = layout(c, sub, f, 0);
-  riseText(c, sub, W / 2 - L.width / 2, 720, f, subCol, u, 0.02, { size: 40, stagger: 0.004, dur: 0.15 });
+  riseText(c, sub, W / 2 - L.width / 2, 720, f, subCol, u, 0.12, { size: 40, stagger: 0.005, dur: 0.25 });
 }
 
 function cutSpeed(c, u, uq) {
@@ -1102,8 +1134,8 @@ function cutGoogle(c, u, uq) {
   c.stroke();
   line(c, 480, 300, 492, 312);
   const q = 'nettside for bedrift';
-  text(c, typed(q, prog(uq, 0.0, 0.1)), 515, 310, `400 38px ${SANS}`, BLACK);
-  const r = E.outExpo(prog(u, 0.1, 0.22));
+  text(c, typed(q, prog(uq, 0.04, 0.38)), 515, 310, `400 38px ${SANS}`, BLACK);
+  const r = E.outExpo(prog(u, 0.45, 0.65));
   if (r > 0) {
     c.save();
     c.globalAlpha = r;
@@ -1128,7 +1160,7 @@ function cutGoogle(c, u, uq) {
 function sceneContact(c, lt, t) {
   fillBg(c, BLACK);
   c.save();
-  const push = 1 + lt * 0.015;
+  const push = 1 + lt * 0.008;
   c.translate(W / 2, H / 2);
   c.scale(push, push);
   c.translate(-W / 2, -H / 2);
@@ -1174,7 +1206,7 @@ function sceneContact(c, lt, t) {
 
   // CTA button + cursor click
   const bp = E.outBack(prog(lt, 0.8, 1.05), 2.2);
-  const click = lt - 1.28;
+  const click = lt - (CLICK_T - S.contact.start);
   const press = click > 0 ? 1 - 0.07 * Math.exp(-click * 12) * Math.cos(click * 20) : 1;
   if (bp > 0) {
     const bw = 620;
@@ -1199,10 +1231,10 @@ function sceneContact(c, lt, t) {
       c.stroke();
       c.globalAlpha = 1;
     }
-    const cm = E.outCubic(prog(lt, 0.95, 1.26));
+    const cm = E.outCubic(prog(lt, 1.3, 1.73));
     if (cm > 0) cursor(c, lerp(1560, 1110, cm), lerp(1060, 790, cm), 1.4 * (click > 0 && click < 0.1 ? 0.9 : 1));
   }
-  const fa = prog(lt, 1.0, 1.45);
+  const fa = prog(lt, 1.9, 2.6);
   mono(c, typed('seventhseal.no   ·   team@seventhseal.no   ·   48 38 31 97   ·   Oslo / Norge', fa), W / 2, 930, 22, WHITE, 0.6, 'center', 500);
   c.restore();
 }
@@ -1231,7 +1263,7 @@ const CAPTIONS = {
   process: 'FRA FØRSTE IDÉ TIL FERDIG LØSNING',
 };
 
-const CUTS = [...SCENES.map((s) => s.end), at(1, 3), ...[1, 2, 3, 4, 5, 6, 7].map((k) => at(6, k * 0.5))].sort((a, b) => a - b);
+const CUTS = [...SCENES.map((s) => s.end), S.tagline.start + TAGLINE_IDAG * BEAT, ...MONTAGE_CUTS.map((c) => c.start)].sort((a, b) => a - b);
 const nextCut = (t) => CUTS.find((c) => c > t + 1e-9) ?? DURATION;
 const MAX_SUBSAMPLES = {};
 const sceneAt = (t) => {
@@ -1273,6 +1305,7 @@ const IMAGES = {};
 function drawWorld(c, t, f, si) {
   const sc = SCENES[si];
   const st = Math.min(t, sc.end - 1e-4);
+  SD = sc.end - sc.start;
   c.setTransform(1, 0, 0, 1, 0, 0);
   c.globalAlpha = 1;
   c.globalCompositeOperation = 'source-over';
@@ -1330,22 +1363,23 @@ function applyChromatic(amount) {
 function hudStyle(t) {
   const sc = SCENES[sceneAt(t)];
   const lt = t - sc.start;
+  const sd = sc.end - sc.start;
   switch (sc.id) {
     case 'tagline':
-      return lt > 3.75 * BEAT ? BLACK : WHITE;
+      return lt > sd - 0.25 * BEAT ? BLACK : WHITE;
     case 'pillars':
       return 'difference';
     case 'work':
-      return lt > 3.6 * BEAT ? WHITE : BLACK;
+      return lt > sd - 0.4 * BEAT ? WHITE : BLACK;
     case 'process':
-      return [WHITE, WHITE, BLACK, BLACK, WHITE, WHITE, BLACK, BLACK][Math.min(7, Math.floor(lt / HB))];
+      return [WHITE, WHITE, BLACK, BLACK, WHITE, WHITE, BLACK, BLACK][cutIndex(t)];
     default:
       return WHITE;
   }
 }
 
 function drawHUD(c, t, f) {
-  const a = E.outCubic(prog(t, 0.2, 0.5)) * (1 - prog(t, at(7), at(7) + 0.12));
+  const a = E.outCubic(prog(t, 0.2, 0.5)) * (1 - prog(t, S.contact.start, S.contact.start + 0.12));
   if (a <= 0) return;
   const si = sceneAt(t);
   const sc = SCENES[si];
@@ -1374,10 +1408,10 @@ function drawHUD(c, t, f) {
   let prevLabel = si > 0 ? SCENES[si - 1].label : '';
   let since = sc.start;
   if (sc.id === 'process') {
-    const k = Math.min(7, Math.floor((t - sc.start) / HB));
+    const k = cutIndex(t);
     label = MONTAGE_LABELS[k];
     prevLabel = k > 0 ? MONTAGE_LABELS[k - 1] : SCENES[si - 1].label;
-    since = sc.start + k * HB;
+    since = MONTAGE_CUTS[k].start;
   }
   const roll = si === 0 ? 1 : E.outExpo(prog(t, since, since + 0.2));
   c.save();

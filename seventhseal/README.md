@@ -1,6 +1,6 @@
 # SEVENTH SEAL — Brand Reel
 
-A 15-second, 1080p60 brand reel for [Seventh Seal](https://seventhseal.no) with a synced soundtrack. Like the reel in the repo root, it's all code: no keyframes, no stock assets.
+A 43-second, 1080p60 brand reel for [Seventh Seal](https://seventhseal.no) with a synced soundtrack. Like the reel in the repo root, it's all code: no keyframes, no stock assets.
 
 **▶ [`seventhseal-reel.mp4`](seventhseal-reel.mp4)**
 
@@ -20,16 +20,18 @@ All of the material comes from seventhseal.no:
 
 The reel runs at 128 BPM in D minor, and every cut lands on a beat.
 
-| # | Time | Shot | What happens |
-|---|---|---|---|
-| 01 | 0.00 | **Seglet** | The board fills in and the four red diamonds land on the beat, each with a chess-piece "clack" in the audio. The camera then dives into a diamond |
-| 02 | 1.88 | **Visjon** | *Designer / morgendagens / nettsider, / i dag.* rises from masks, then a board-square wipe |
-| 03 | 3.75 | **Byråkvalitet** | A 3D storm of italic 7 and S glyphs (after the site's hero) behind *Byråkvalitet, uten byråpris.* |
-| 04 | 5.63 | **7 søyler** | Seven concrete pillars rise and a red capital chases across them on 16ths. The headline is difference-blended over the concrete |
-| 05 | 7.50 | **Arbeid** | Skogli Gard, Økonomiledelse AS and Lille Amir Frisør shown as real site screenshots scrolling on the beat, plus the testimonial card |
-| 06 | 9.38 | **Pris** | A slot-machine *7 500 kr*, *+ 500 kr/mnd*, and a checklist that ticks on the half beats |
-| 07 | 11.25 | **Prosess** | 8 cuts in 1.9 s: Figma, kode, responsivt, adminpanel, ytelse (53 %), SSL, universell utforming (15 %) and a Google search result |
-| 08 | 13.13 | **Kontakt** | The full lockup assembles, then the cursor clicks *Få gratis førsteutkast* |
+**Pacing.** Each shot is as long as its text needs, and the motion and cuts stay fast. Headlines hold for at least about a second after they land, and sentences get roughly one second per 18 characters. The quote, the price list, the stats and the end card each get a proper hold, while shots with no text stay short. Scene lengths live in the `PLAN` table and the montage cut lengths in `MONTAGE_BEATS`, both in `src/timeline.js`. The picture and the soundtrack both follow them.
+
+| # | Time | Bars | Shot | What happens |
+|---|---|---|---|---|
+| 01 | 0:00 | 1 | **Seglet** | The board fills in and the four red diamonds land on the beat, each with a chess-piece "clack". The camera then dives into a diamond |
+| 02 | 0:02 | 2 | **Visjon** | *Designer / morgendagens / nettsider,* builds line by line and holds, then *i dag.* and a board-square wipe |
+| 03 | 0:06 | 2 | **Byråkvalitet** | A 3D storm of italic 7 and S glyphs behind *Byråkvalitet, uten byråpris.* |
+| 04 | 0:09 | 3 | **7 søyler** | Seven concrete pillars rise. Each lights up red for one beat, in order, with its name turning red, so the eye reads them one at a time |
+| 05 | 0:15 | 3 | **Arbeid** | Three live case studies scroll on the beat, then the testimonial card |
+| 06 | 0:21 | 2 | **Pris** | A slot-machine *7 500 kr*, *+ 500 kr/mnd*, and a checklist that ticks on the beat |
+| 07 | 0:24 | 7 | **Prosess** | 8 cuts, each 2–5 beats depending on its text: Figma, kode, responsivt, adminpanel, ytelse (53 %), SSL, universell utforming (15 %), Google |
+| 08 | 0:38 | 3 | **Kontakt** | The lockup assembles, the cursor clicks *Få gratis førsteutkast*, and the contact line holds |
 
 ## Build it
 
