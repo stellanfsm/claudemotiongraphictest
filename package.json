@@ -7,7 +7,8 @@
     "render": "node scripts/render.mjs",
     "draft": "node scripts/render.mjs --subsamples 1 --out showreel-draft.mp4",
     "render:seventhseal": "node scripts/render.mjs --src seventhseal/src --out seventhseal/seventhseal-reel.mp4",
-    "render:adminpanel": "node scripts/render.mjs --src adminpanel/src --out adminpanel/adminpanelet.mp4"
+    "render:adminpanel": "node scripts/render.mjs --src adminpanel/src --out adminpanel/adminpanelet.mp4",
+    "render:dittrekk": "node scripts/render.mjs --src dittrekk/src --out dittrekk/ditt-trekk.mp4"
   },
   "repository": {
     "type": "git",
