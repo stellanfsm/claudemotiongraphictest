@@ -415,12 +415,12 @@ export function drawNewSite(c, t, edit = null) {
   const off = edit && (edit.frame > 0 || edit.typed > 0) ? 90 * E.outCubic(clamp(edit.frame * 2)) : 0;
 
   // hero copy
-  c.font = `700 88px ${SANS}`;
+  c.font = `700 74px ${SANS}`;
   c.fillStyle = N.ink;
-  c.fillText('Solid håndverk,', 40, 270 + off);
-  c.fillText('levert til', 40, 364 + off);
+  c.fillText('Solid håndverk,', 40, 262 + off);
+  c.fillText('levert til', 40, 350 + off);
   c.fillStyle = N.accent;
-  c.fillText('avtalt tid.', 40 + c.measureText('levert til ').width, 364 + off);
+  c.fillText('avtalt tid.', 40 + c.measureText('levert til ').width, 350 + off);
   c.font = `400 30px ${SANS}`;
   c.fillStyle = N.muted;
   c.fillText('Tømrer og snekker for hjem og bedrift.', 42, 430 + off);

@@ -16,12 +16,12 @@ export const BAR = BEAT * 4; // 2 s
 // [id, length in beats]
 const PLAN = [
   ['count', 6], //   0.0  «Nettsiden din har 3 sekunder» — a swarm of cursors counts down
-  ['gone', 5], //    3.0  «53 % er allerede borte»
-  ['judge', 5], //   5.5  the old website, «94 % dømmer nettsiden din på designet»
-  ['rebuild', 16], // 8.0  «Tid for et nytt trekk» — the screen flips tile by tile into a new site
-  ['proof', 10], //  16.0  real client sites on real phones
-  ['offer', 12], //  21.0  «Byråkvalitet, uten byråpris» — the price on a 3D odometer
-  ['cta', 12], //    27.0  «Ditt trekk» — a red king moves, the board becomes the logo
+  ['gone', 7], //    3.0  «53 % er allerede borte»
+  ['judge', 7], //   6.5  the old website, «94 % dømmer nettsiden din på designet»
+  ['rebuild', 20], // 10.0 «Tid for et nytt trekk» — the screen flips tile by tile into a new site
+  ['proof', 10], //  20.0  real client sites on real phones
+  ['offer', 16], //  25.0  «Byråkvalitet, uten byråpris» — the price on a 3D odometer
+  ['cta', 14], //    33.0  «Ditt trekk» — a red king moves, the board becomes the logo
 ];
 
 let cursor = 0;
@@ -30,7 +30,7 @@ export const SCENES = PLAN.map(([id, beats]) => {
   cursor += beats;
   return s;
 });
-export const DURATION = cursor * BEAT; // 33 s
+export const DURATION = cursor * BEAT; // 40 s
 export const S = Object.fromEntries(SCENES.map((s) => [s.id, s]));
 export const sb = (id, beats = 0) => S[id].start + beats * BEAT; // scene-relative beat → seconds
 
@@ -43,42 +43,42 @@ export const GONE = {
   share: 0.53, // leave at 3 s — «53 % av brukere forlater en side som tar mer enn 3 sekunder å laste»
   text: 0.3,
   caption: 0.6,
-  converge: 2.1, // the survivors rush to where the phone will land
+  converge: 3.1, // the survivors rush to where the phone will land
 };
 export const JUDGE = {
   slam: 0.0,
   stat: 0.25,
   line: 0.5,
-  stop: 2.1, // tape stop
+  stop: 3.1, // tape stop
 };
 export const REBUILD = {
   land: 0.0, // the red diamond lands on the old site
   flipSpan: 0.8, // the wave crosses the screen
   flipDur: 0.3, // one tile's flip
   spin: 1.0, // the drop: phone spins, new site revealed
-  features: [2.0, 3.5, 5.0, 6.5], // four callouts, 1.5 s each
+  features: [2.0, 4.0, 6.0, 8.0], // four callouts, 2 s each
 };
 export const PROOF = {
   rise: 0.0,
   focusB: 2.4,
 };
 export const OFFER = {
-  strike: 0.95, // the red line through «byråpris»
-  drums: 2.0, // the odometer rolls in
-  land: [2.3, 2.45, 2.6, 2.75], // each drum lands
-  plus: 2.9,
-  checks: [3.3, 3.8, 4.3, 4.8],
-  vat: 5.2,
+  strike: 1.2, // the red line through «byråpris»
+  drums: 2.6, // the odometer rolls in
+  land: [2.9, 3.05, 3.2, 3.35], // each drum lands
+  plus: 3.6,
+  checks: [4.2, 4.75, 5.3, 5.85],
+  vat: 6.4,
 };
 export const CTA = {
-  move: 0.55, // the king steps forward
-  crane: 2.0, // camera rises to top-down
-  burst: 2.55, // the king bursts into the four diamonds
-  diamonds: [2.75, 2.9, 3.05, 3.2],
-  lockup: 3.3,
-  button: 3.7,
-  tap: 4.35,
-  lines: 4.55,
+  move: 0.7, // the king steps towards you
+  crane: 2.4, // camera rises to top-down
+  burst: 2.95, // the king bursts into the four diamonds
+  diamonds: [3.15, 3.3, 3.45, 3.6],
+  lockup: 3.7,
+  button: 4.1,
+  tap: 4.8,
+  lines: 5.0,
 };
 
 // ─── impacts: camera shake / chromatic aberration / sound ──────────────────
@@ -124,21 +124,9 @@ const F = [53, 57, 60];
 const Gm = [55, 58, 62];
 const A = [57, 61, 64];
 export const CHORDS = [
-  Dm, // 0  count
-  Dm, // 2  count / gone
-  Dm, // 4  gone / judge
-  Bb, // 6  judge
-  Dm, // 8  rebuild — the flip
-  Bb, // 10
-  F, // 12
-  C, // 14
-  Dm, // 16 proof
-  Bb, // 18
-  Gm, // 20 offer
-  A, // 22
-  Dm, // 24
-  C, // 26
-  Dm, // 28 cta
-  Bb, // 30
-  Dm, // 32
+  Dm, Dm, Dm, Bb, // 0–8   count · gone · judge
+  Dm, Bb, F, C, Dm, // 8–18  rebuild (the drop at 11)
+  Bb, Gm, C, // 18–24 proof
+  Dm, Bb, Gm, A, // 24–32 offer
+  Dm, Bb, Dm, Dm, // 32–40 cta
 ];

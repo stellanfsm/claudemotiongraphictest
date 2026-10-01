@@ -107,7 +107,7 @@ function quadPath(c, pts) {
 // 01 — COUNT: «Nettsiden din har 3 sekunder.» A thousand visitors (cursors)
 // form the digits; the ring runs down in real seconds.
 // ════════════════════════════════════════════════════════════════════════════
-const SW_N = 1000;
+const SW_N = 340;
 const CX = 540;
 const CY = 905;
 const SWARM = { cur: [], digits: [] };
@@ -139,12 +139,27 @@ function sampleGlyph(ch, n, seed) {
     if (pts.length >= n * 1.05) break;
     step *= 0.85;
   }
-  // deterministic shuffle, keep n, then order by angle so morphs flow
-  for (let i = pts.length - 1; i > 0; i--) {
-    const j = Math.floor(hash(i * 7 + seed) * (i + 1));
-    [pts[i], pts[j]] = [pts[j], pts[i]];
+  // Mitchell's best-candidate: n points spread evenly through the glyph
+  const cand = pts;
+  const out = [cand[Math.floor(hash(seed) * cand.length)]];
+  for (let k = 1; k < n; k++) {
+    let best = null;
+    let bestD = -1;
+    for (let c = 0; c < 24; c++) {
+      const p = cand[Math.floor(hash(seed * 31 + k * 97 + c * 13) * cand.length)];
+      let dmin = Infinity;
+      for (const q of out) {
+        const d = (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2;
+        if (d < dmin) dmin = d;
+      }
+      if (dmin > bestD) {
+        bestD = dmin;
+        best = p;
+      }
+    }
+    out.push(best);
   }
-  pts = pts.slice(0, n);
+  pts = out;
   pts.sort((a, b) => Math.atan2(a[1] - CY, a[0] - CX) - Math.atan2(b[1] - CY, b[0] - CX));
   return pts;
 }
@@ -159,13 +174,13 @@ function initSwarm() {
     const q = hash(i * 7 + 3);
     const leave = q < 0.03 ? COUNT.morphs[0] : q < 0.06 ? COUNT.morphs[1] : q < GONE.share ? S.gone.start : Infinity;
     const cu = {
-      s: 0.78 + 0.5 * hash(i * 13 + 1),
+      s: 0.86,
       d: hash(i * 3 + 11) * 0.13,
       sw: (hash(i * 5 + 2) - 0.5) * 2,
       leave,
       hover: -1,
     };
-    if (leave === Infinity && hov < HOVER.length && hash(i * 5 + 9) < 0.07) cu.hover = hov++;
+    if (leave === Infinity && hov < HOVER.length && hash(i * 5 + 9) < 0.16) cu.hover = hov++;
     // scatter target after the burst (survivors drift across the frame)
     const a = hash(i * 17 + 4) * TAU;
     const rr = 280 + hash(i * 19 + 8) * 560;
@@ -186,15 +201,15 @@ function digitPos(i, t) {
     const dx = b[0] - a[0];
     const dy = b[1] - a[1];
     return [
-      lerp(a[0], b[0], e) - dy * 0.35 * bulge * cu.sw + (a[0] - CX) * 0.22 * bulge,
-      lerp(a[1], b[1], e) + dx * 0.35 * bulge * cu.sw + (a[1] - CY) * 0.22 * bulge,
+      lerp(a[0], b[0], e) - dy * 0.12 * bulge * cu.sw + (a[0] - CX) * 0.12 * bulge,
+      lerp(a[1], b[1], e) + dx * 0.12 * bulge * cu.sw + (a[1] - CY) * 0.12 * bulge,
     ];
   };
   if (t >= COUNT.morphs[0]) p = morph(A[i], B[i], COUNT.morphs[0]);
   if (t >= COUNT.morphs[1]) p = morph(B[i], C[i], COUNT.morphs[1]);
-  const tension = 1 + smooth(2.3, 3.0, t) * 2.6;
+  const tension = 1 + smooth(2.3, 3.0, t) * 1.6;
   const f = 1.1 * (1 + smooth(2.3, 3.0, t));
-  return [p[0] + noise1(t * f + i * 3.1) * 3.5 * tension, p[1] + noise1(t * f + i * 5.7 + 100) * 3.5 * tension];
+  return [p[0] + noise1(t * f + i * 3.1) * 1.6 * tension, p[1] + noise1(t * f + i * 5.7 + 100) * 1.6 * tension];
 }
 
 // { x, y, a, s, rot } of cursor i at global time t, or null when gone
@@ -221,13 +236,30 @@ function swarmState(i, t) {
     const [x, y] = digitPos(i, t);
     return { x, y, a: 1, s: cu.s * (1 + 0.04 * Math.exp(-((t % 1) * 7))), rot: 0 };
   }
-  // survivors
+  // survivors: knocked outward, then they keep drifting and wandering — and a
+  // few more give up and leave, one at a time
   const p0 = digitPos(i, S.gone.start);
   const dt = t - S.gone.start;
   const k = E.outExpo(clamp(dt / 0.8));
-  let x = lerp(p0[0], cu.sc[0], k) + noise1(t * 0.6 + i) * 18;
-  let y = lerp(p0[1], cu.sc[1], k) + noise1(t * 0.6 + i + 50) * 18;
-  let a = lerp(1, 0.26, smooth(0, 0.45, dt));
+  let ddx = cu.sc[0] - CX;
+  let ddy = cu.sc[1] - CY;
+  const dl = Math.hypot(ddx, ddy) || 1;
+  ddx /= dl;
+  ddy /= dl;
+  const drift = Math.max(0, dt - 0.4) * 70;
+  let x = lerp(p0[0], cu.sc[0], k) + ddx * drift + Math.sin(t * 1.6 + i * 1.7) * 24 + noise1(t * 1.2 + i) * 10;
+  let y = lerp(p0[1], cu.sc[1], k) + ddy * drift + Math.cos(t * 1.4 + i * 2.3) * 24 + noise1(t * 1.2 + i + 50) * 10;
+  let a = lerp(1, 0.34, smooth(0, 0.45, dt));
+  const late = cu.hover < 0 && hash(i * 41 + 3) < 0.45 ? S.gone.start + 0.7 + hash(i * 43 + 1) * 2.2 : Infinity;
+  if (t > late) {
+    const d2 = t - late;
+    const sx = Math.sign(ddx || 1);
+    x += sx * (300 * d2 + 2600 * d2 * d2);
+    y -= 60 * d2;
+    a = lerp(a, 0.8, clamp(d2 * 6));
+    if (x < -80 || x > W + 80) return null;
+    return { x, y, a, s: cu.s, rot: sx * 0.45 * clamp(d2 * 8) };
+  }
   let s = cu.s * 0.92;
   const tc = S.gone.start + GONE.converge;
   if (t >= tc) {
@@ -450,7 +482,8 @@ function rig(t) {
   const f4 = E.inOutCubic(prog(lr, REBUILD.features[3] - 0.2, REBUILD.features[3] + 0.3));
   yaw = lerp(yaw, sp * TAU - 0.12, f4 * 0.7);
   // exit: fly off to the right
-  const ex = E.inExpo(prog(lr, 7.62, 8.0));
+  const RD = S.rebuild.end - S.rebuild.start;
+  const ex = E.inExpo(prog(lr, RD - 0.38, RD));
   x += ex * 3.2;
   yaw -= ex * 0.9;
   const model = G.chain(G.T(x, y, 0), G.Ry(yaw), G.Rx(pitch), G.Rz(roll));
@@ -526,7 +559,7 @@ function sceneJudge(c, lt, t) {
     const wob = 1 + smooth(0.8, 2, lt);
     let x = hx + noise1(t * 0.9 + i) * 10 * wob + (phoneNow[0] - 540) * 0.6;
     let y = hy + noise1(t * 0.9 + i + 40) * 10 * wob + (phoneNow[1] - 1180) * 0.6;
-    const Lv = 0.95 + hash(i * 3) * 1.25;
+    const Lv = 1.1 + hash(i * 3) * 1.9;
     let rot = 0;
     if (lt > Lv) {
       const dt = lt - Lv;
@@ -640,9 +673,9 @@ function sceneRebuild(c, lt, t) {
   // features
   REBUILD.features.forEach((f, k) => {
     const d = lr - f;
-    if (d < -0.05 || d > 1.62) return;
+    if (d < -0.05 || d > 2.12) return;
     const F = FEATURES[k];
-    const outAt = k === 3 ? 1.52 : 1.38;
+    const outAt = k === 3 ? 1.52 : 1.85;
     mono(c, `0${k + 1} / 04`, 76, 262, 24, RED, E.outCubic(prog(d, 0, 0.15)) * (1 - prog(d, outAt, outAt + 0.1)), 'left', 600);
     riseText(c, F.label, 72, 352, `700 78px ${SANS}`, WHITE, d, 0.02, { size: 78, tracking: -2, out: outAt });
     mono(c, typed(F.sub, prog(d, 0.12, 0.45)), 76, 410, 22, WHITE, 0.7 * (1 - prog(d, outAt, outAt + 0.12)), 'left', 600);
@@ -651,7 +684,7 @@ function sceneRebuild(c, lt, t) {
 }
 
 function featDesign(c, d, vp, model) {
-  const a = E.outCubic(prog(d, 0.1, 0.3)) * (1 - prog(d, 1.35, 1.5));
+  const a = E.outCubic(prog(d, 0.1, 0.3)) * (1 - prog(d, 1.82, 1.97));
   if (a <= 0) return;
   // Figma selection around the headline, tracking the phone in 3D
   const box = [
@@ -687,7 +720,7 @@ function featDesign(c, d, vp, model) {
     [NEW.forest, '#1F3A2C'],
   ];
   chips.forEach(([col, hex], i) => {
-    const p = E.outBack(prog(d, 0.2 + i * 0.07, 0.45 + i * 0.07), 2.4) * (1 - E.inCubic(prog(d, 1.3, 1.45)));
+    const p = E.outBack(prog(d, 0.2 + i * 0.07, 0.45 + i * 0.07), 2.4) * (1 - E.inCubic(prog(d, 1.78, 1.93)));
     if (p <= 0) return;
     const y = 820 + i * 118;
     c.save();
@@ -704,7 +737,7 @@ function featDesign(c, d, vp, model) {
     mono(c, hex, 178, y + 8, 22, WHITE, 0.85 * clamp(p), 'left', 600);
   });
   // type specimen
-  const tp = E.outExpo(prog(d, 0.45, 0.75)) * (1 - prog(d, 1.3, 1.45));
+  const tp = E.outExpo(prog(d, 0.45, 0.75)) * (1 - prog(d, 1.78, 1.93));
   if (tp > 0) {
     c.save();
     c.globalAlpha = tp;
@@ -723,7 +756,7 @@ const CODE = [
   ['</section>', '', ''],
 ];
 function featCode(c, d) {
-  const a = E.outExpo(prog(d, 0.06, 0.3)) * (1 - E.inCubic(prog(d, 1.3, 1.46)));
+  const a = E.outExpo(prog(d, 0.06, 0.3)) * (1 - E.inCubic(prog(d, 1.8, 1.96)));
   if (a <= 0) return;
   c.save();
   c.translate(60 - (1 - a) * 120, 700);
@@ -744,7 +777,7 @@ function featCode(c, d) {
   }
   mono(c, 'index.html', 290, 39, 18, WHITE, 0.5, 'center', 500);
   const total = CODE.reduce((s, l) => s + l.join('').length, 0);
-  let n = Math.floor(prog(d, 0.18, 1.0) * total);
+  let n = Math.floor(prog(d, 0.18, 1.3) * total);
   c.font = `500 23px ${MONO}`;
   CODE.forEach((parts, i) => {
     const y = 104 + i * 58;
@@ -768,7 +801,7 @@ function featCode(c, d) {
 }
 
 function featSpeed(c, d, vp, model) {
-  const a = E.outExpo(prog(d, 0.05, 0.25)) * (1 - E.inCubic(prog(d, 1.3, 1.45)));
+  const a = E.outExpo(prog(d, 0.05, 0.25)) * (1 - E.inCubic(prog(d, 1.8, 1.95)));
   if (a <= 0) return;
   const cx = 250;
   const cy = 1010;
@@ -879,8 +912,13 @@ function sceneProof(c, lt, t) {
   const items = [];
   const models = [];
   phones.forEach((p, k) => {
-    const s = spring(lt - p.drop, 12, 0.5);
-    const y = PH.h / 2 + 0.002 + (1 - s) * 2.6;
+    const lt2 = lt - p.drop;
+    const T0 = 0.42; // fall time
+    const fall = lt2 < T0 ? 2.6 * (1 - (Math.max(0, lt2) / T0) ** 2) : 0;
+    const db = lt2 - T0;
+    const bounce = db > 0 ? 0.09 * Math.exp(-db * 7) * Math.abs(Math.sin(db * 13)) : 0;
+    const s = lt2 < T0 ? 0 : 1 - Math.exp(-db * 9);
+    const y = PH.h / 2 + 0.002 + fall + bounce;
     const focus = k === 0 ? 1 - smooth(PROOF.focusB - 0.3, PROOF.focusB + 0.3, lt) : smooth(PROOF.focusB - 0.3, PROOF.focusB + 0.3, lt);
     const yaw = p.yaw * (1 - focus * 0.55) + (1 - s) * (k ? -1.2 : 1.2);
     const model = G.chain(G.T(p.pos[0], y, p.pos[2]), G.Ry(yaw), G.Rx(-0.04 * focus));
@@ -1066,7 +1104,7 @@ function sceneOffer(c, lt, t) {
   DRUM.xs.forEach((x, k) => {
     items.push({ mesh: MESH.drum, model: G.chain(housing, G.T(x, 0, -DRUM.r + 0.02)), mat: { mode: 4, texA: TEX.digits, rectA: [0, drumRoll(k, lt), 1, 1], color: [1, 1, 1], rough: 0.14, coat: 1, shadow: false } });
   });
-  const cam = { eye: [0.45, 0.6, 17.5], target: [0.2, 1.72, 0], fov: 0.55 };
+  const cam = { eye: [0.45, -1.9, 17.5], target: [0.2, -1.0, 0], fov: 0.55 };
   const { vp } = gl3(c, items, cam, {
     light: { keyDir: [0.2, 1, 0.8], keyCol: [1.6, 1.6, 1.6], envKey: [2.2, 2.2, 2.2], envStrip: [2.6, 2.6, 2.6], shadow: false, amb: [0.03, 0.03, 0.03] },
   });
@@ -1160,7 +1198,7 @@ function checkerWipe(c, p, color) {
 const SQ = 0.5;
 // logo units → world (the logo is an 8×8 board: 8 units per square)
 const L2W = (lx, ly) => [((lx - 35.93) / 8) * SQ, ((ly - 41.5) / 8) * SQ];
-const KING_FROM = [-1.25, -0.75];
+const KING_FROM = [-1.25, -1.75];
 const KING_TO = [-1.25, -1.25];
 const PAWNS = [
   [0.25, -0.25],
@@ -1177,7 +1215,7 @@ function ctaCamera(lt) {
   const k = lt < CTA.move ? KING_FROM : KING_TO;
   const orbit = lerp(0.62, 0.28, E.outCubic(prog(lt, 0, 2)));
   const d0 = lerp(4.1, 3.5, E.outCubic(prog(lt, 0, 2)));
-  const tgt0 = [-1.1, 0.78, lerp(-0.95, -1.12, E.inOutCubic(prog(lt, CTA.move + 0.25, CTA.move + 1.2)))];
+  const tgt0 = [-1.1, 0.78, lerp(-1.45, -1.25, E.inOutCubic(prog(lt, CTA.move + 0.25, CTA.move + 1.4)))];
   const eye0 = [tgt0[0] + Math.sin(orbit) * d0, 0.95 + 0.12 * prog(lt, 0, 2), tgt0[2] + Math.cos(orbit) * d0];
   const topH = 26;
   const tgt1 = [0, 0, 0.95];
