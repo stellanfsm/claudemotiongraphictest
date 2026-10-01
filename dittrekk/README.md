@@ -16,7 +16,7 @@ The reel is a pitch that tells a story, in the order a small-business owner scro
 4. **What you get**, one line at a time: skreddersydd design, bygget i kode, rask lastetid, oppdater selv i adminpanelet.
 5. **Proof.** Two real client sites, Skogli Gard and Økonomiledelse AS, on phones.
 6. **The offer.** *Byråkvalitet, uten ~~byråpris~~.* The price rolls in on a mechanical odometer, followed by what's included.
-7. **The call to action is the brand.** *Ditt trekk.* A red king steps forward on a chessboard. The camera rises until the board is the Seventh Seal logo (it has always been an 8×8 board), and the king bursts into its four red diamonds. Then *Få et gratis utkast*.
+7. **The call to action is the brand.** *Ditt trekk.* A red king steps forward on a chessboard. The camera rises until the board is the Seventh Seal logo (it has always been an 8×8 board), and the king bursts into its four red diamonds. Each diamond lands on a note of the reel's theme, and the music turns from minor to major. Then *Få et gratis utkast*.
 
 The first frame reads on its own as a thumbnail, and the last frame is a clean end card that loops back into the hook.
 
@@ -63,7 +63,36 @@ The first frame reads on its own as a thumbnail, and the last frame is a clean e
 - **Motion blur and anti-aliasing come from the same samples.** Each frame is up to 8 sub-frame samples, and each sample's projection is offset by a sub-pixel Halton jitter, so the 3D gets both motion blur and anti-aliasing. Samples never straddle a cut.
 - **Post** runs on the GPU: bloom (weighted toward the brand red), chromatic aberration and lens breathing on impacts, flashes, vignette and grain.
 - **`src/sites.js`** draws both «Din Bedrift» sites in code, animated: the marquee, the spinning globe, the hit counter, and the admin-panel edit with «Rediger», typing, «Lagre» and «Publisert».
-- **`src/audio.js`** synthesizes the whole score from the shared timeline. It includes clock ticks and braams on each second, a sub-drop burst, a dial-up handshake, and a MIDI loop that really tape-stops (it's resampled). Each of the 220 tiles gets its own click as it lands. It also has the drop, keyboard foley, odometer ratchets, checklist dings, a chess clock under *Ditt trekk*, and the logo sting.
+- **`src/audio.js`** synthesizes the whole score from the shared timeline, so every hit lands on its frame.
+
+## The music
+
+120 BPM in D minor, mixed to about −14.5 LUFS.
+
+**A theme.** The reel has a four-note motif: D, up a minor seventh to C (a nod to *Seventh*), then A and F. It runs through the whole piece:
+
+- on a music box over the countdown, one note per second;
+- falling bells (F, E, D) after the 53 % burst;
+- the lead line after the drop, as a syncopated 3-3-2 phrase;
+- in octaves over the price;
+- finally on the four diamonds as they land on the board: the sonic logo.
+
+**Arrangement:**
+
+| Time | Section | Harmony | What plays |
+|---|---|---|---|
+| 0:00 | Countdown | D pedal | Clock ticks, heartbeat, braams on each second, the motif on a music box |
+| 0:05.5 | Old site | (gag) | Dial-up handshake, a cheesy MIDI tune that tape-stops (resampled) |
+| 0:08 | Flip | Cadd9 | 220 tile clicks, a supersaw swell opening up, snare roll, a pulsing bass |
+| 0:09 | Drop | Dm9 · B♭maj9 · F · Cadd9 | Four-on-the-floor with swung hats, rims and shakers, a rolling syncopated bass, and the motif |
+| 0:16 | Proof | Gm9 · B♭maj9 · C | A filter "breath" as the phones land, thinner drums, a 16th arpeggio |
+| 0:21 | Claim | B♭ · C | Supersaw chords, a rising lead run, a snare roll into the price |
+| 0:23 | Price | Dm9 · Gm9 · A7 | A second drop with a reese bass, the motif in octaves, and odometer ratchets. A C♯ leading tone pulls into the end card |
+| 0:27 | Ditt trekk | Dadd9 · B♭ · C → D major | Dark and still under a chess clock (a callback to the countdown), the sonic logo, then a turn to D major on the lockup, resolving F♯ → E → D |
+
+**Mix.** Melodic parts go through a music bus that is filtered as a whole, closed for builds and open for drops. Pads and chords pump with the kick through a sidechain. The mix also has a dotted-eighth ping-pong delay and a Freeverb-style reverb.
+
+**Sound design.** Keyboard foley, checklist dings, and a click for every tile.
 
 ## Build it
 
