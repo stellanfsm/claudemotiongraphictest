@@ -156,7 +156,7 @@ function sceneBuild(c, lt, t) {
     c.globalAlpha = 1 - out;
     const k = 3.4;
     drawLockup(c, 540 - 113 * k, 820 - 41 * k - out * 200, k, lt + 0.05);
-    riseText(c, 'Det fikser vi.', 540, 1150, `700 92px ${SANS}`, WHITE, lt, 0.25, { align: 'center', size: 92, tracking: -2 });
+    riseText(c, 'Det fikser vi.', 540, 1150, `700 92px ${SANS}`, WHITE, lt, 0.12, { align: 'center', size: 92, tracking: -2 });
     c.restore();
   }
   const fly = E.outExpo(prog(lt, BUILD.phone, BUILD.phone + 0.7));

@@ -19,8 +19,8 @@ The research behind it, with sources, is in [`../research/short-form-ads.md`](..
 | 0:00 | *Kunden googlet deg. Hva fant de?* A search for «rørlegger oslo» on a phone. Your card says **Ingen nettside**, between two competitors with sites | The first frame reads on its own. It calls out the audience and opens a curiosity gap (Loewenstein). The logo is on screen from the first second |
 | 0:02.5 | *Da ringer de neste.* The customer's thumb taps the competitor's **Ring** button, and the call starts | Loss framing (Kahneman & Tversky): show what you lose, not what you might gain |
 | 0:04.5 | *7 av 10 sjekker håndverkeren før de bestemmer seg.* Ten people, seven light up | A real, sourced Norwegian statistic (Forbrukerrådet, Håndverkerrapport 2024) |
-| 0:07.5 | The logo assembles. *Det fikser vi.* → *Vi lager et førsteutkast.* A site for «Ditt Firma AS» builds on the phone, from wireframe to design, with a progress chip | The turn. The brand appears at the moment of relief. The build is the product demo |
-| 0:11.5 | *Du ser det først. Så bestemmer du.* «Ring nå» pulses | Risk reversal and a free first step (zero-price effect) |
+| 0:07.5 | The logo assembles. *Det fikser vi.* → (0:09) *Vi lager et førsteutkast.* A site for «Ditt Firma AS» builds on the phone, from wireframe to design, with a progress chip | The turn. The brand appears at the moment of relief. The build is the product demo |
+| 0:12 | *Du ser det først. Så bestemmer du.* «Ring nå» pulses | Risk reversal and a free first step (zero-price effect) |
 | 0:15 | *Typisk pris for en skreddersydd nettside: 17 000–50 000 kr* is struck through → **Fra 7 500 kr + 500 kr/mnd**, then what's included | Anchoring, with specific numbers (3 revisjonsrunder, 2–4 uker) |
 | 0:22.5 | The finished site spins in. *Liker du ikke utkastet? Da koster det 0 kr.* | The peak, at about 70 % of the runtime (peak-end rule) |
 | 0:25.8 | The same search again, and this time **your** card has the site. The thumb taps *your* Ring. *Nå ringer de deg.* | Closes the loop the hook opened |

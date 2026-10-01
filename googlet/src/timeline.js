@@ -32,7 +32,7 @@ export const S = Object.fromEntries(SCENES.map((s) => [s.id, s]));
 
 export const HOOK = { typed: 0.55, results: 0.45, flag: 1.15, swap: 2.55, tap: 3.0, call: 3.2 };
 export const STAT = { num: 0.05, icons: 0.35, line: 0.75, src: 1.0 };
-export const BUILD = { sting: 0.0, phone: 0.85, t1: 1.0, wire: 1.25, design: 2.9, t2: 4.15, ring: 5.2 };
+export const BUILD = { sting: 0.0, phone: 1.35, t1: 1.5, wire: 1.7, design: 3.3, t2: 4.5, ring: 5.5 };
 export const PRICE = { anchor: 0.1, strike: 1.5, price: 2.0, monthly: 2.45, checks: [3.1, 3.6, 4.1, 4.6], vat: 5.15 };
 export const REVEAL = { spin: 0.0, t1: 0.35, t2: 0.75, search: 3.3, t3: 3.45, tap: 4.05, call: 4.25 };
 export const CTA = { lockup: 0.1, button: 0.8, tap: 1.6, lines: 1.95 };
