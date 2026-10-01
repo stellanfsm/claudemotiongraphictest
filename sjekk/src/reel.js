@@ -229,7 +229,7 @@ function card(c, x, y, side, label, a, blur = false) {
   const cx = clamp(side < 0 ? x - w - 40 : x + 40, 50, W - 50 - w);
   const cy = y - 112;
   c.save();
-  c.globalAlpha = clamp(a);
+  c.globalAlpha *= clamp(a);
   c.translate(0, (1 - E.outCubic(clamp(a))) * 24);
   c.shadowColor = 'rgba(0,0,0,0.5)';
   c.shadowBlur = 30;
